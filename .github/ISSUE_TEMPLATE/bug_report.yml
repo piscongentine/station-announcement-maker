@@ -1,0 +1,44 @@
+name: 🐞 Bug report
+description: Something doesn't work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting! The **About** tab shows the app version.
+  - type: input
+    id: version
+    attributes:
+      label: App version
+      placeholder: v1.0.0
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where did it happen?
+      options: [Single, Batch, Route Announcement Manager, Settings, Setup / install, Other]
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected and what you got. Screenshots help.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Drop an MP3 on Single\n2. Choose Smart Direct Route Integration\n3. ..."
+  - type: input
+    id: route
+    attributes:
+      label: Route and audio file type (if relevant)
+      placeholder: e.g. Bengal V5, MP3 48 kHz stereo
+  - type: textarea
+    id: log
+    attributes:
+      label: Log (optional)
+      description: The end of %LOCALAPPDATA%\StationAnnouncementMaker\app.log
+      render: text

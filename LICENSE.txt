@@ -1,0 +1,38 @@
+Station Announcement Maker Licence
+
+Copyright (c) 2026 Piscongentine. All rights to the name "Station
+Announcement Maker", its logo and the name "Piscongentine" are reserved.
+Part of UTILITY TOOLS.
+
+Permission is granted, free of charge, to any person who obtains a copy of
+this software and its source code (the "Software"), to use, copy, modify,
+merge and share the Software, and to share modified versions of it, under
+these conditions:
+
+1. Keep the credit. This copyright notice and this licence must stay in
+   every copy and every modified version, and must not be removed or
+   changed.
+
+2. Do not claim it as your own. You may not present the Software, or a
+   modified version, as your own original work, and you may not replace or
+   remove the author's name.
+
+3. Rename modified versions. A modified version must not be called
+   "Station Announcement Maker" and must not use its logo or the name
+   "Piscongentine" for its name, branding or publicity. You must say
+   clearly that it is based on Station Announcement Maker by
+   Piscongentine.
+
+4. No selling. You may not sell the Software or a modified version of it.
+
+Bundled fonts: Inter and JetBrains Mono are licensed under the SIL Open
+Font License 1.1.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Keep the ssource.dat.bak backup option on, and back up your routes before
+large changes.

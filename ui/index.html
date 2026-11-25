@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-motion="full" class="booting">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Station Announcement Maker</title>
+<link rel="icon" href="img/favicon.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-single" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 15v-2M11.5 17v-6M14 15.5v-3"/></symbol>
+    <symbol id="i-batch" viewBox="0 0 24 24"><rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/><path d="M11 14h5M11 11h5M11 17h3"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><path d="M8 3 5 21M16 3l3 18"/><path d="M6.6 8h10.8M6 13h12M5.4 18h13.2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M21.5 12h-3M5.5 12h-3M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1M18.7 18.7l-2.1-2.1M7.4 7.4 5.3 5.3"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="7" y="5.5" width="3.5" height="13" rx="1" fill="currentColor" stroke="none"/><rect x="13.5" y="5.5" width="3.5" height="13" rx="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h4.6l2 2.2h8.4A1.5 1.5 0 0 1 21 8.7v9.8a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17v.4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></symbol>
+    <symbol id="i-replace" viewBox="0 0 24 24"><path d="M4 9a8 8 0 0 1 14.5-3.5L20 7M20 3v4h-4"/><path d="M20 15a8 8 0 0 1-14.5 3.5L4 17M4 21v-4h4"/></symbol>
+    <symbol id="i-signal" viewBox="0 0 24 24"><rect x="8" y="2.5" width="8" height="14" rx="4"/><circle cx="12" cy="6.5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6"/><path d="M12 16.5V22M8.5 22h7"/></symbol>
+    <symbol id="i-yt" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.2 5 2.8-5 2.8z" fill="currentColor"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.7L20 8.5M20 3.5v5h-5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-horn" viewBox="0 0 24 24"><path d="M3 10v4h3l7 4.5v-13L6 10z"/><path d="M16 9.2a4 4 0 0 1 0 5.6M18.6 6.6a7.6 7.6 0 0 1 0 10.8"/></symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24"><path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 7v10M21 12h0"/></symbol>
+    <symbol id="i-db" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.5"/><path d="M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m8.8 12 2.3 2.3 4.2-4.3"/></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2.5V6M15 2.5V6M9 18v3.5M15 18v3.5M2.5 9H6M2.5 15H6M18 9h3.5M18 15h3.5"/></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 0 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-1.3-1.1-1.6-1.1-2.8 0-1 .8-1.7 1.8-1.7h2.2A4.3 4.3 0 0 0 21 10.6C21 6.4 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7" r="1.2"/><circle cx="15.5" cy="7.5" r="1.2"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M5 4v16M12 4v16M19 4v16"/><rect x="3" y="13" width="4" height="3" rx="1"/><rect x="10" y="7" width="4" height="3" rx="1"/><rect x="17" y="15" width="4" height="3" rx="1"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6z"/></symbol>
+    <symbol id="i-open" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v4.5A1.5 1.5 0 0 1 16.5 20h-11A1.5 1.5 0 0 1 4 18.5v-11A1.5 1.5 0 0 1 5.5 6H10"/></symbol>
+    <symbol id="i-train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 10h14M9 17l-3 4M15 17l3 4"/><circle cx="9" cy="13.5" r="1" fill="currentColor"/><circle cx="15" cy="13.5" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5z"/><path d="M15.5 9.5a3.5 3.5 0 0 1 0 5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1.3-4-2-5.5-2.5M14.5 21v-3.2a2.8 2.8 0 0 0-.8-2.2c2.7-.3 5.5-1.3 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6.2 0C5.8 2.9 4.8 3.2 4.8 3.2a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 3.4 9.6c0 4.6 2.8 5.7 5.5 6a2.8 2.8 0 0 0-.8 2.2V21"/></symbol>
+  </defs>
+</svg>
+
+<div class="bg-grid" aria-hidden="true"></div>
+
+<header class="app-header">
+  <div class="brand">
+    <div class="emblem emblem-sm" aria-hidden="true">
+      <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+      <img src="img/logo.png" alt="">
+    </div>
+    <div class="brand-text">
+      <h1>Station Announcement Maker</h1>
+      <div class="brand-sub"><span class="led"></span>MSTS · TSRE5 · Open Rails <span class="sep">|</span> <span id="hdr-route" class="mono"></span></div>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="pill-yt" id="btn-yt" title="Opens audioforges.com in your browser"><svg><use href="#i-yt"/></svg><span>YT → WAV Converter</span><svg class="ext"><use href="#i-open"/></svg></button>
+    <button class="theme-switch" id="theme-switch" role="switch" aria-label="Toggle dark / light theme">
+      <span class="knob"><svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg></span>
+    </button>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs" role="tablist">
+  <button role="tab" data-tab="single" class="active"><svg><use href="#i-single"/></svg>Single</button>
+  <button role="tab" data-tab="batch"><svg><use href="#i-batch"/></svg>Batch<span class="count" id="batch-count" hidden>0</span></button>
+  <button role="tab" data-tab="routes"><svg><use href="#i-route"/></svg>Route Announcement Manager</button>
+  <button role="tab" data-tab="settings"><svg><use href="#i-settings"/></svg>Settings</button>
+  <button role="tab" data-tab="about"><svg><use href="#i-info"/></svg>About</button>
+  <span class="tab-indicator" id="tab-indicator"></span>
+</nav>
+
+<main id="main">
+  <!-- ============ SINGLE ============ -->
+  <section class="tab-page active" id="page-single">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-horn"/></svg>Announcement audio</div>
+        <label class="dropzone" id="single-drop">
+          <input type="file" id="single-file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.oga,.opus,.flac,.wma,.webm,.mp4,.aif,.aiff">
+          <div class="dz-inner">
+            <div class="dz-icon"><svg><use href="#i-upload"/></svg></div>
+            <div class="dz-title">Drop an audio file here</div>
+            <div class="dz-sub">or <u>browse</u> · MP3, WAV, M4A, OGG, FLAC, AAC, OPUS</div>
+          </div>
+        </label>
+        <div class="file-panel" id="single-panel" hidden>
+          <div class="file-row">
+            <div class="file-icon"><svg><use href="#i-wave"/></svg></div>
+            <div class="file-meta">
+              <div class="file-name" id="single-orig"></div>
+              <div class="file-sub mono" id="single-info"></div>
+            </div>
+            <span class="badge" id="single-badge"></span>
+            <button class="icon-btn" id="single-clear" title="Remove file"><svg><use href="#i-x"/></svg></button>
+          </div>
+          <div class="player" id="single-player">
+            <button class="play-btn" disabled><svg><use href="#i-play"/></svg></button>
+            <div class="wave-wrap"><canvas class="wave"></canvas><div class="wave-progress"></div></div>
+            <span class="time mono">0:00 / 0:00</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="single-name">Announcement name</label>
+          <input type="text" id="single-name" placeholder="e.g. Howrah Junction Announcement" maxlength="80" spellcheck="false">
+          <div class="filenames mono" id="single-files"><span>—.wav</span><span>—.sms</span></div>
+        </div>
+      </div>
+      <div class="card" id="single-dest-card"></div>
+    </div>
+  </section>
+
+  <!-- ============ BATCH ============ -->
+  <section class="tab-page" id="page-batch">
+    <div class="grid-2 batch-grid">
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-batch"/></svg>Batch queue <span class="muted" id="batch-summary"></span></div>
+        <label class="dropzone compact" id="batch-drop">
+          <input type="file" id="batch-file" multiple accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.oga,.opus,.flac,.wma,.webm,.mp4,.aif,.aiff">
+          <div class="dz-inner">
+            <div class="dz-icon"><svg><use href="#i-upload"/></svg></div>
+            <div class="dz-title">Drop many audio files at once</div>
+            <div class="dz-sub">or <u>browse</u> · each one is converted in the background</div>
+          </div>
+        </label>
+        <div class="queue" id="batch-queue"></div>
+        <div class="empty-note" id="batch-empty">The queue is empty.</div>
+      </div>
+      <div class="card" id="batch-dest-card"></div>
+    </div>
+  </section>
+
+  <!-- ============ ROUTES ============ -->
+  <section class="tab-page" id="page-routes">
+    <div class="card route-bar">
+      <div class="route-pick">
+        <div class="card-title"><svg><use href="#i-route"/></svg>Route</div>
+        <div class="row">
+          <select id="rm-route"></select>
+          <button class="btn ghost" id="rm-browse"><svg><use href="#i-folder"/></svg>Browse…</button>
+          <button class="btn ghost" id="rm-rescan" title="Scan again"><svg><use href="#i-refresh"/></svg></button>
+        </div>
+        <div class="mono muted small" id="rm-paths"></div>
+      </div>
+      <div class="route-stats" id="rm-stats"></div>
+    </div>
+    <div class="rm-setup" id="rm-setup"></div>
+    <div class="rm-tools">
+      <div class="search"><svg><use href="#i-search"/></svg><input type="search" id="rm-search" placeholder="Search announcements, .sms or .wav names…" spellcheck="false"></div>
+      <div class="chips" id="rm-chips">
+        <button data-f="route" class="active">Route sounds</button>
+        <button data-f="ann">Announcements</button>
+        <button data-f="bad">Needs attention</button>
+        <button data-f="all">All entries</button>
+      </div>
+    </div>
+    <div class="ann-grid" id="rm-grid"></div>
+    <div class="empty-note" id="rm-empty" hidden></div>
+  </section>
+
+  <!-- ============ SETTINGS ============ -->
+  <section class="tab-page" id="page-settings">
+    <div class="settings-grid">
+      <div class="card span-2">
+        <div class="card-title"><svg><use href="#i-db"/></svg>MSTS / Open Rails folder</div>
+        <p class="muted">One-time setup. The folder that holds <span class="mono">ROUTES</span>, <span class="mono">TRAINS</span>, <span class="mono">GLOBAL</span> and <span class="mono">SOUND</span>.</p>
+        <div class="row">
+          <div class="path-box mono" id="set-root">Not set</div>
+          <button class="btn" id="set-root-browse"><svg><use href="#i-folder"/></svg>Choose…</button>
+        </div>
+        <div class="row wrap" id="set-root-badges"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-wave"/></svg>WAV output</div>
+        <div class="field"><label>Sample rate</label>
+          <div class="seg" data-key="sampleRate"><button data-v="22050">22 050 Hz</button><button data-v="44100">44 100 Hz</button></div></div>
+        <div class="field"><label>Channels</label>
+          <div class="seg" data-key="channels"><button data-v="1">Mono</button><button data-v="2">Stereo</button></div></div>
+        <div class="field"><label>Format</label><div class="chip-static mono">16-bit PCM · RIFF/WAVE (always)</div></div>
+        <div class="field"><label>Default output folder</label>
+          <div class="row"><div class="path-box mono" id="set-out">Not set</div><button class="btn ghost" id="set-out-browse"><svg><use href="#i-folder"/></svg></button></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-sliders"/></svg>.sms template</div>
+        <div class="num-grid">
+          <div class="field"><label for="set-act">Activation distance (m)</label><input type="number" id="set-act" min="60" max="5000" step="10"></div>
+          <div class="field"><label for="set-deact">Deactivation distance (m)</label><input type="number" id="set-deact" min="60" max="5000" step="10"></div>
+          <div class="field"><label for="set-vol">Volume (0 – 1)</label><input type="number" id="set-vol" min="0" max="1" step="0.05"></div>
+        </div>
+        <p class="muted small">Sound starts <span id="tpl-start">500</span> m out, stops when leaving past <span id="tpl-rel">510</span> m, full volume to <span id="tpl-full">300</span> m then fades. Same layout as Bengal V5 / Del / RailIndia.</p>
+        <details class="code-peek"><summary>Preview .sms</summary><pre class="mono" id="tpl-preview"></pre></details>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-shield"/></svg>Safety</div>
+        <label class="toggle-row"><span><b>Back up ssource.dat</b><br><span class="muted small">Copy to <span class="mono">ssource.dat.bak</span> before every change</span></span>
+          <input type="checkbox" class="toggle" id="set-backup"></label>
+        <p class="muted small">Replaced .wav files are kept in <span class="mono" id="set-datadir"></span>\replaced.</p>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-cpu"/></svg>Diagnostics <button class="icon-btn right" id="diag-refresh" title="Refresh"><svg><use href="#i-refresh"/></svg></button></div>
+        <ul class="diag" id="diag-list"></ul>
+      </div>
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-palette"/></svg>Appearance</div>
+        <div class="field"><label>Theme</label>
+          <div class="seg" data-key="theme"><button data-v="dark">Dark</button><button data-v="light">Light</button><button data-v="system">System</button></div></div>
+        <div class="field"><label>Motion</label>
+          <div class="seg" data-key="motion"><button data-v="full">Full</button><button data-v="reduced">Reduced</button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="tab-page" id="page-about">
+    <div class="about">
+      <div class="emblem emblem-xl" aria-hidden="true">
+        <span class="ring r1"></span><span class="ring r2"></span><span class="ring r3"></span>
+        <img src="img/emblem.png" alt="">
+        <div class="emblem-track"><span></span></div>
+      </div>
+      <h2>Station Announcement Maker</h2>
+      <div class="excl-badge"><svg><use href="#i-train"/></svg>Exclusively built for MSTS / TSRE5 / Open Rails</div>
+      <div class="suite-badge"><svg><use href="#i-sliders"/></svg>Part of <b>UTILITY TOOLS</b></div>
+      <p class="muted about-lead">Turn any recording into a ready-to-place station announcement: MSTS-safe 16-bit PCM WAV, a matching <span class="mono">.sms</span> and a correct <span class="mono">ssource.dat</span> entry — written straight into your route.</p>
+      <div class="features">
+        <div class="feature"><svg><use href="#i-bolt"/></svg><b>Instant conversion</b><span>MP3, M4A, OGG, FLAC and more to 22 050 / 44 100 Hz 16-bit PCM.</span></div>
+        <div class="feature"><svg><use href="#i-route"/></svg><b>Direct route integration</b><span>Writes into the route's SOUND folder and appends ssource.dat in its own UTF-16 encoding.</span></div>
+        <div class="feature"><svg><use href="#i-batch"/></svg><b>Batch generation</b><span>A whole line's worth of stations in one go.</span></div>
+        <div class="feature"><svg><use href="#i-replace"/></svg><b>Announcement manager</b><span>Browse, play and swap any route sound without touching .sms or ssource.dat.</span></div>
+        <div class="feature"><svg><use href="#i-shield"/></svg><b>Safe by default</b><span>ssource.dat.bak backups, overwrite prompts and kept copies of replaced audio.</span></div>
+        <div class="feature"><svg><use href="#i-signal"/></svg><b>Format checks</b><span>Flags MP3-in-WAV, 24-bit and other files that MSTS / OR can't play.</span></div>
+      </div>
+      <div class="help card">
+        <div class="card-title"><svg><use href="#i-bolt"/></svg>Help, issues &amp; updates</div>
+        <p class="muted">Found a bug or have an idea? Report it on GitHub, or send a one-click email (version details are filled in for you).</p>
+        <div class="help-actions">
+          <button class="btn" data-link="issues"><svg><use href="#i-github"/></svg>Report on GitHub</button>
+          <button class="btn mail" data-link="mail"><svg><use href="#i-mail"/></svg>Email the developer</button>
+          <button class="btn ghost" data-link="releases"><svg><use href="#i-refresh"/></svg>Check for updates</button>
+          <button class="btn ghost" data-link="changelog"><svg><use href="#i-single"/></svg>Update log</button>
+        </div>
+        <div class="mono muted small help-mail">shwetpurwar0911@gmail.com · github.com/piscongentine/station-announcement-maker</div>
+      </div>
+      <div class="credits card">
+        <div><span class="muted">Author</span><b>Piscongentine</b></div>
+        <div><span class="muted">Suite</span><b>UTILITY TOOLS</b></div>
+        <div><span class="muted">Fonts</span><span>Inter &amp; JetBrains Mono (SIL Open Font License)</span></div>
+        <div><span class="muted">Engine</span><span>Python standard library · Microsoft Edge Web Audio</span></div>
+        <div><span class="muted">YT → WAV</span><span>audioforges.com (external site)</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer"><span class="mono">v1.0.0</span><span>Made in Bharat <span class="flag-emoji" hidden>🇮🇳</span><svg class="flag" viewBox="0 0 30 20" style="stroke:none"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".6"/><circle cx="15" cy="10" r=".5" fill="#000080"/></svg></span><span class="muted">by Piscongentine</span><a href="#" class="foot-link" data-link="issues">Report an issue</a><a href="#" class="foot-link" data-link="mail">Email</a></footer>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
+
+<script src="audio.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

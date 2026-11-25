@@ -1,0 +1,8 @@
+# build output (setup .exe files are published as release assets, not committed)
+dist/
+Station Announcement Maker.exe
+installer/preview.png
+__pycache__/
+*.pyc
+# local test data
+ui/_testdata/

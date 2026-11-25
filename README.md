@@ -53,7 +53,8 @@ Setup updates an installed copy in place and keeps your settings. Older versions
 
 ## 🆕 What's new in 1.1: 3D Sound Placement
 
-- 🚉 **1.1.1:** platforms are drawn as empty boxes and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Labels no longer overlap.
+- 🪟 **1.1.2:** platforms are shaded at 30 %, all dropdowns open as frosted glass, and the editor works on every route checked (Bengal V5, Cal, Del, RailIndia, IMPERIAL INDIAN CORRIDOR, au_great_zig_zag).
+- 🚉 **1.1.1:** platforms are drawn as boxes and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Labels no longer overlap.
 
 - 🧭 **The route in 3D, 360°.** Real terrain, track, stations and every placed sound, read from the route's own files.
   - Fly with ↑ ↓ ← → (Shift = 2×), rotate with Q/E, go up and down with R/F, zoom with +/−.

@@ -173,7 +173,7 @@ function groundAt(gx, gz) {
 }
 
 /* ------------------------------------------------------------------ dynamic geometry: sounds, rings, pointer */
-let soundBuf = null, soundCount = 0, overlayLines = null, overviewLines = null, platformLines = null;
+let soundBuf = null, soundCount = 0, overlayLines = null, overviewLines = null, platformLines = null, platformFill = null;
 
 /* platforms: an empty rectangular box (border only) along the two platform markers, like the Track Viewer */
 const PF_HALF = 3.5;
@@ -185,12 +185,16 @@ function platformBox(p) {
 }
 function buildPlatforms() {
   if (platformLines) { gl.deleteBuffer(platformLines.buf); platformLines = null; }
-  const out = [], col = [0.93, 0.95, 1.0, 0.95];
+  if (platformFill) { gl.deleteBuffer(platformFill.buf); platformFill = null; }
+  const out = [], fill = [], col = [0.93, 0.95, 1.0, 0.95];
   for (const p of ED.data.platforms || []) {
     if (Math.hypot(p.b[0] - p.a[0], p.b[2] - p.a[2]) < 2) continue;
     const c = platformBox(p), sel = ED.selStation && ED.selStation.name === p.station, k = sel ? [0.96, 0.62, 0.04, 1] : col;
     for (let i = 0; i < 4; i++) { const u = c[i], v = c[(i + 1) % 4]; out.push(u[0], u[1], -u[2], ...k, v[0], v[1], -v[2], ...k); }
+    const f = sel ? [0.96, 0.62, 0.04, 0.30] : [0.88, 0.92, 1.0, 0.30];  // shaded box, 30 % opacity
+    for (const i of [0, 1, 2, 0, 2, 3]) fill.push(c[i][0], c[i][1] - 0.05, -c[i][2], ...f);
   }
+  if (fill.length) platformFill = { buf: vbo(new Float32Array(fill)), count: fill.length / 7 };
   if (out.length) platformLines = { buf: vbo(new Float32Array(out)), count: out.length / 7 };
 }
 const COL = { placed: [0.23, 0.51, 0.96, 1], route: [0.38, 0.65, 0.98, 1], region: [0.66, 0.45, 0.96, 1], sel: [0.96, 0.62, 0.04, 1],
@@ -755,6 +759,11 @@ function frame(now) {
   gl.uniformMatrix4fv(P.u.uVP, false, VP); gl.uniform3fv(P.u.uCam, eye); gl.uniform3fv(P.u.uFog, fog); gl.uniform1f(P.u.uFogFar, fogFar);
   const drawLines = L => { if (!L) return; gl.bindBuffer(gl.ARRAY_BUFFER, L.buf); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 28, 0); gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 28, 12); gl.drawArrays(gl.LINES, 0, L.count); };
   if (overviewLines && (ED.mode === 'map' || true)) drawLines(overviewLines);
+  if (platformFill) {  // translucent platform shading: blended, does not hide what is behind it
+    gl.depthMask(false); gl.bindBuffer(gl.ARRAY_BUFFER, platformFill.buf);
+    gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 28, 0); gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 28, 12);
+    gl.drawArrays(gl.TRIANGLES, 0, platformFill.count); gl.depthMask(true);
+  }
   for (const t of ED.tiles.values()) drawLines(t.track);
   drawLines(platformLines);
   gl.disable(gl.DEPTH_TEST); drawLines(overlayLines); gl.enable(gl.DEPTH_TEST);

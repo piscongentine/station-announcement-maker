@@ -218,6 +218,15 @@ _FILE = re.compile(r'FileName\s*\(\s*"?([^")]*?)"?\s*\)')
 _UID = re.compile(r"UiD\s*\(\s*(\d+)\s*\)")
 
 
+def ws_is_text(path):
+    """True for the plain (UTF-16 / ANSI) text .ws that this editor can safely rewrite."""
+    with open(path, "rb") as f:
+        head = f.read(64)
+    if head[:2] == b"\xff\xfe":
+        head = head[2:].decode("utf-16-le", "replace").encode("latin-1", "replace")
+    return head.startswith(b"SIMISA@@@@@@@@@@JINX0W0t")
+
+
 def ws_name(tx, tz):
     return "w%s%06d%s%06d.ws" % ("-" if tx < 0 else "+", abs(tx), "-" if tz < 0 else "+", abs(tz))
 
@@ -271,6 +280,8 @@ def list_sounds(route):
         if not m:
             continue
         tx, tz = int(m.group(1)), int(m.group(2))
+        if not ws_is_text(os.path.join(wd, n)):
+            continue  # compressed/binary .ws: not shown, never written
         try:
             _t, _e, srcs, reg, _u = read_ws(os.path.join(wd, n))
         except (OSError, UnicodeError):
@@ -317,6 +328,8 @@ def save_changes(route, add, remove, backup_dir=None):
         name = ws_name(tx, tz)
         path = M.find_ci(wd, name) or os.path.join(wd, name)
         existed = os.path.isfile(path)
+        if existed and not ws_is_text(path):
+            raise ValueError(f"{name} is a compressed/binary world file - edit that tile in TSRE5 (nothing was written)")
         if existed:
             text, enc, _s, _r, uids = read_ws(path)
             if backup_dir:

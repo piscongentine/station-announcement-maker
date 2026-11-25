@@ -8,7 +8,7 @@ ROOT = os.path.dirname(HERE)
 FONTS = os.path.join(ROOT, "ui", "fonts")
 EMBLEM = Image.open(os.path.join(ROOT, "ui", "img", "emblem.png")).convert("RGBA")
 LOGO = Image.open(os.path.join(ROOT, "ui", "img", "logo.png")).convert("RGBA")
-VERSION = "v1.1.1"
+VERSION = "v1.1.2"
 
 NAVY, NAVY2, ACCENT, AMBER, TEXT2 = (15, 23, 42), (8, 13, 27), (59, 130, 246), (245, 158, 11), (148, 163, 184)
 

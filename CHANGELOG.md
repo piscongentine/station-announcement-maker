@@ -4,11 +4,28 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 
 | Version | Released | Download | Release page |
 |---|---|---|---|
-| **1.1.1** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.1.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) | [v1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1) |
+| **1.1.2** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.2.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) | [v1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2) |
+| 1.1.1 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.1.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) | [v1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1) |
 | 1.1.0 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.0/Station-Announcement-Maker-Setup-1.1.0.exe) | [v1.1.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.0) |
 | 1.0.0 | 25 Nov 2026 | [Station-Announcement-Maker-Setup-1.0.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.0.0/Station-Announcement-Maker-Setup-1.0.0.exe) | [v1.0.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.0.0) |
 
 Always the newest: **[Station-Announcement-Maker-Setup.exe](https://github.com/piscongentine/station-announcement-maker/releases/latest/download/Station-Announcement-Maker-Setup.exe)**. Setup updates an installed copy in place, and your settings are kept.
+
+---
+
+## 1.1.2 · 26 Nov 2026
+
+[⬇️ Download 1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) · [Release page](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2)
+
+### Changed
+- **Shaded platforms.** Platform boxes are filled at **30 % opacity**, white, or amber for the selected station. The border stays on top, and the track and sounds stay visible through the fill.
+- **Glass dropdowns.** Every dropdown in the app, plus the File / View / Help menus, now opens as a frosted-glass panel with blur, a gradient highlight on the current choice and a smooth open/close, in both themes.
+
+### Safety
+- The 3D editor never writes into a compressed or binary `.ws` world sound file. Such a tile is skipped with a message, and you can edit it in TSRE5 instead.
+
+### Checked on every installed route
+The 3D editor was checked on Bengal V5, Cal, Del, RailIndia, THE IMPERIAL INDIAN CORRIDOR and au_great_zig_zag. All six load with their stations, platforms, placed sounds, track-sound regions and terrain.
 
 ---
 

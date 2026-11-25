@@ -94,6 +94,7 @@ $$('#tabs button').forEach(b => b.onclick = () => {
   moveIndicator();
   if (b.dataset.tab === 'routes') ensureRouteScan();
   if (b.dataset.tab === 'settings') runDiagnostics();
+  window.SAMEditor?.onTab(b.dataset.tab);
   setTimeout(SAMAudio.redrawAll, 30);
 });
 window.addEventListener('resize', moveIndicator);
@@ -594,6 +595,8 @@ function renderSettings() {
       (S.detected ? ` <button class="btn ghost" data-act="use-detected">${icon('check')}Use detected <span class="mono">${esc(S.detected)}</span></button>` : '');
   $$('.seg').forEach(seg => $$('button', seg).forEach(b => b.classList.toggle('active', String(s[seg.dataset.key]) === b.dataset.v)));
   const setv = (id, v) => { const e = $(id); if (document.activeElement !== e) e.value = v; };
+  $('#set-backup-world').checked = s.backupWorld !== false;
+  const tb = $('#set-tsre'); tb.textContent = s.tsrePath || S.tsre || 'Not found'; tb.classList.toggle('set', !!(s.tsrePath || S.tsre));
   setv('#set-act', s.activation); setv('#set-deact', s.deactivation); setv('#set-vol', s.volume);
   $('#set-backup').checked = !!s.backupSsource;
   tplPreview(); fmtChanged();
@@ -606,6 +609,11 @@ $$('.seg').forEach(seg => $$('button', seg).forEach(b => b.onclick = () => {
 [['#set-act', 'activation'], ['#set-deact', 'deactivation'], ['#set-vol', 'volume']].forEach(([id, k]) =>
   $(id).addEventListener('input', e => { if (e.target.value !== '') { saveSettings({ [k]: +e.target.value }, false); } }));
 $('#set-backup').onchange = e => saveSettings({ backupSsource: e.target.checked });
+$('#set-backup-world').onchange = e => saveSettings({ backupWorld: e.target.checked });
+$('#set-tsre-browse').onclick = async () => {
+  const r = await api('pick-folder', { title: 'Choose the folder that contains TSRE5.exe', initial: 'C:\\OR\\tsre' });
+  if (r.path) saveSettings({ tsrePath: r.path.replace(/[\\/]+$/, '') + '\\TSRE5.exe' });
+};
 $('#set-root-browse').onclick = () => pickRoot();
 $('#set-out-browse').onclick = async () => {
   const r = await api('pick-folder', { title: 'Default output folder', initial: S.settings.outputFolder, output: true });
@@ -631,7 +639,11 @@ async function runDiagnostics() {
       row(d.rootWritable, 'Write permission: ROUTES folder', S.settings.root ? S.settings.root + '\\ROUTES' : 'MSTS/OR folder not set') +
       (d.outputWritable !== null ? row(d.outputWritable, 'Write permission: output folder', S.settings.outputFolder) : '') +
       row(!!d.edge, 'App window (Microsoft Edge)', d.edge) +
-      row(true, 'Backend', 'Python ' + d.python + ' · data in ' + d.dataDir);
+      row(true, 'Backend', 'Python ' + d.python + ' · data in ' + d.dataDir) +
+      row(d.gpu && d.gpu.adapters && d.gpu.adapters.some(g => !g.basic) ? true : false, '3D graphics chip', (d.gpu?.choice || '') + ' · WebGL: ' + webglRenderer()) +
+      row(d.tsre ? true : null, 'TSRE5', d.tsre || 'not found - set it in Graphics & 3D editor');
+    const ad = (d.gpu?.adapters || []).map(g => `${g.name}${g.dedicated ? ' (dedicated)' : g.basic ? ' (no driver)' : ' (integrated)'}`).join(' · ');
+    $('#set-gpu-info').textContent = `Found: ${ad || 'no graphics adapter'}. Now using: ${d.gpu?.choice || 'decided at start'}. WebGL: ${webglRenderer()}`;
     $('#set-datadir').textContent = d.dataDir;
   } catch (e) { ul.innerHTML = row(false, 'Backend', e.message); }
   btn.querySelector('svg').style.animation = '';
@@ -660,11 +672,20 @@ document.addEventListener('click', e => {
   }
   applyTheme(); renderSettings(); renderRouteSelect(); renderAllDest(); batchCounts();
   requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove('booting')));
-  const want = location.hash.slice(1);
+  const want = location.hash.slice(1).split('&')[0];
   if (want) $(`#tabs [data-tab="${CSS.escape(want)}"]`)?.click();
   requestAnimationFrame(moveIndicator);
   document.fonts.ready.then(moveIndicator);
   if (!S.root.ok) toast('Set your MSTS / Open Rails folder once to enable direct route integration.', 'warn', 6000);
 })();
-window.SAM = { get state() { return S; }, queue, single, dests, scanRoute, toast };
+function webglRenderer() {
+  try {
+    const c = document.createElement('canvas'), gl = c.getContext('webgl2') || c.getContext('webgl');
+    if (!gl) return 'not available';
+    const ext = gl.getExtension('WEBGL_debug_renderer_info');
+    return ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL).replace(/^ANGLE \((.*)\)$/, '$1') : 'available';
+  } catch { return 'not available'; }
+}
+window.SAM = { get state() { return S; }, set state(v) { S = v; }, queue, single, dests, scanRoute, toast, api, esc, icon, spinner,
+  confirmBox, modal, audioUrl, allRoutes, browseRoute, renderSettings, saveSettings, sanitize, webglRenderer, updateHeaderRoute };
 })();

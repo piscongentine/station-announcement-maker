@@ -28,6 +28,9 @@ a 16-bit PCM WAV, a matching <code>.sms</code> and the <code>ssource.dat</code> 
 ---
 
 <p align="center">
+  <img src="docs/img/editor-3d.png" alt="3D Sound Placement: the route in 3D with stations, track and every placed sound" width="100%">
+  <img src="docs/img/editor-map.png" alt="Map view: the selected sound's activation, start, stop and silent rings from its .sms" width="49%">
+  <img src="docs/img/help.png" alt="Help & Report tab" width="49%">
   <img src="docs/img/single.png" alt="Single tab: drop a recording, name it, pick the route" width="49%">
   <img src="docs/img/routes.png" alt="Route Announcement Manager: every announcement of a route with playback and format checks" width="49%">
   <img src="docs/img/settings.png" alt="Settings: verified MSTS/OR folder, WAV and .sms defaults, diagnostics" width="49%">
@@ -48,9 +51,24 @@ a 16-bit PCM WAV, a matching <code>.sms</code> and the <code>ssource.dat</code> 
 
 Setup updates an installed copy in place and keeps your settings. Older versions stay downloadable in the **[update log](CHANGELOG.md)**.
 
-## 🆕 What's new in 1.0.0
+## 🆕 What's new in 1.1.0: 3D Sound Placement
 
-The first release. Single and batch conversion, Smart Direct Route Integration, the Route Announcement Manager, a dark/light Midnight Rail design and an installer that sets everything up.
+- 🧭 **The route in 3D, 360°.** Real terrain, track, stations and every placed sound, read from the route's own files.
+  - Fly with ↑ ↓ ← → (Shift = 2×), rotate with Q/E, go up and down with R/F, zoom with +/−.
+  - An on-screen pad does the same, and Map view (M) gives a top-down view.
+- 📍 **Pointer node and place / select / remove.** Click the ground, pick an `ssource.dat` sound, place it.
+  - Select by click or by name; the selection turns amber.
+  - Saving writes the same `.ws` format TSRE5 uses, with backups.
+- 🔊 **Hear the route.** Choose ssource.dat sounds, `ttype.dat` track sounds or all of them, played the way each `.sms` defines:
+  - Activation and Deactivation distances;
+  - distance and speed triggers;
+  - volume curves;
+  - 3D direction.
+
+  A train-speed slider plays the speed-controlled track sounds.
+- 🎚 **Sound bars** with live levels, nearest stations, on/off buttons, a slider through every place a sound is used, and a near-station / radius filter.
+- ❓ **Help & Report tab**, File / View / Help menus, and an Open in TSRE5 option.
+- 🖥 **Graphics check.** The dedicated GPU is used when it has a driver; otherwise the integrated chip.
 
 Full details and a download link for every version: **[Update log](CHANGELOG.md)**.
 
@@ -64,6 +82,8 @@ Full details and a download link for every version: **[Update log](CHANGELOG.md)
 | 🗂 **Route Announcement Manager** | Shows every `ssource.dat` entry of a route as a searchable card with playback. **Replace Audio** swaps one `.wav` and leaves `.sms` and `ssource.dat` untouched. It also flags MP3-in-WAV, 24-bit and missing files. |
 | 🛡 **Safe by default** | Never overwrites without asking. Duplicate names in a batch get `_2`, `_3`; nothing is added to `ssource.dat` twice. Replaced audio is kept. |
 | ⚙️ **Settings** | Verified MSTS/OR folder, WAV and `.sms` defaults, backup toggle, diagnostics, Dark / Light / System theme and Full / Reduced motion. |
+| 🧭 **3D Sound Placement** | The route in 3D or Map view, with stations, track and sounds. Includes the pointer node; place / select / remove / undo / save; radius rings from each `.sms`; sound bars; and the near-station filter. |
+| 🔊 **Hear the route** | ssource.dat, ttype.dat or all sounds, played by each `.sms`'s activation distances, triggers, curves and volume, in 3D. Track sounds get a train-speed slider. |
 | 🔗 **YT → WAV** | One click opens audioforges.com to grab a WAV from a video you're allowed to use. |
 
 ## 🐞 Report an issue
@@ -87,7 +107,7 @@ Everything below copies the format of real Indian routes (Bengal V5, Del, RailIn
   Sound  ( Name ( "Howrah Junction Platform 9" )	FileName ( "Howrah_Junction_Platform_9.sms" )	)
   ```
 
-**In TSRE5:** open the route, choose *Sound sources*, pick the new name and place it at the station.
+**Placing sounds:** use the **3D Sound Placement** tab. It writes the sound into `<route>\WORLD\w-XXXXXX+ZZZZZZ.ws` as `Soundsource ( Position ( x y z ) FileName ( name.sms ) UiD ( n ) )`, the same way TSRE5 does, with the next free UiD for that tile. Every other object in the file is kept as it was. You can also place sounds in TSRE5 itself: open the route, choose *Sound sources*, pick the name and place it.
 
 ## 🧱 Build from source
 

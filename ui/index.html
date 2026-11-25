@@ -6,6 +6,7 @@
 <title>Station Announcement Maker</title>
 <link rel="icon" href="img/favicon.png">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="editor.css">
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -42,6 +43,19 @@
     <symbol id="i-train" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="4"/><path d="M5 10h14M9 17l-3 4M15 17l3 4"/><circle cx="9" cy="13.5" r="1" fill="currentColor"/><circle cx="15" cy="13.5" r="1" fill="currentColor"/></symbol>
     <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5z"/><path d="M15.5 9.5a3.5 3.5 0 0 1 0 5"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 2.8 20 7.3v9.4l-8 4.5-8-4.5V7.3z"/><path d="M12 21.2v-9.3M20 7.3l-8 4.6-8-4.6"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 1 1 3.6 2.4c-.8.4-1.1.9-1.1 1.8v.4M12 17.3v.2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6"/></symbol>
+    <symbol id="i-rotl" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.3-5.6L4 8.7M4 3.7v5h5"/></symbol>
+    <symbol id="i-rotr" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6L20 8.7M20 3.7v5h-5"/></symbol>
+    <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></symbol>
+    <symbol id="i-exit" viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M9 4 3 6.5v13.5L9 17.5l6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18V6L7.5 9.5z"/><path d="m16 9.5 5 5M21 9.5l-5 5"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
     <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1.3-4-2-5.5-2.5M14.5 21v-3.2a2.8 2.8 0 0 0-.8-2.2c2.7-.3 5.5-1.3 5.5-6a4.7 4.7 0 0 0-1.3-3.2 4.3 4.3 0 0 0-.1-3.2s-1-.3-3.4 1.3a11.6 11.6 0 0 0-6.2 0C5.8 2.9 4.8 3.2 4.8 3.2a4.3 4.3 0 0 0-.1 3.2A4.7 4.7 0 0 0 3.4 9.6c0 4.6 2.8 5.7 5.5 6a2.8 2.8 0 0 0-.8 2.2V21"/></symbol>
   </defs>
@@ -72,7 +86,9 @@
   <button role="tab" data-tab="single" class="active"><svg><use href="#i-single"/></svg>Single</button>
   <button role="tab" data-tab="batch"><svg><use href="#i-batch"/></svg>Batch<span class="count" id="batch-count" hidden>0</span></button>
   <button role="tab" data-tab="routes"><svg><use href="#i-route"/></svg>Route Announcement Manager</button>
+  <button role="tab" data-tab="editor"><svg><use href="#i-cube"/></svg>3D Sound Placement<span class="count" id="ed-dirty-count" hidden>0</span></button>
   <button role="tab" data-tab="settings"><svg><use href="#i-settings"/></svg>Settings</button>
+  <button role="tab" data-tab="help"><svg><use href="#i-help"/></svg>Help &amp; Report</button>
   <button role="tab" data-tab="about"><svg><use href="#i-info"/></svg>About</button>
   <span class="tab-indicator" id="tab-indicator"></span>
 </nav>
@@ -165,6 +181,203 @@
     <div class="empty-note" id="rm-empty" hidden></div>
   </section>
 
+  <!-- ============ 3D SOUND PLACEMENT (v1.1) ============ -->
+  <section class="tab-page" id="page-editor">
+    <div class="ed-menubar">
+      <div class="ed-menu">
+        <button class="ed-menu-btn">File</button>
+        <div class="ed-dd">
+          <button data-ed="save"><svg><use href="#i-save"/></svg>Save changes<kbd>Ctrl+S</kbd></button>
+          <button data-ed="undo"><svg><use href="#i-undo"/></svg>Undo<kbd>Ctrl+Z</kbd></button>
+          <button data-ed="reload"><svg><use href="#i-refresh"/></svg>Reload route from disk</button>
+          <button data-ed="tsre"><svg><use href="#i-open"/></svg>Open this place in TSRE5…</button>
+          <button data-ed="exit"><svg><use href="#i-exit"/></svg>Exit editor</button>
+        </div>
+      </div>
+      <div class="ed-menu">
+        <button class="ed-menu-btn">View</button>
+        <div class="ed-dd">
+          <button data-ed="view3d"><svg><use href="#i-cube"/></svg>3D view (360°)<kbd>V</kbd></button>
+          <button data-ed="viewmap"><svg><use href="#i-map"/></svg>Map view (top-down)<kbd>M</kbd></button>
+          <button data-ed="labels"><svg><use href="#i-eye"/></svg>Show / hide labels<kbd>L</kbd></button>
+          <button data-ed="home"><svg><use href="#i-target"/></svg>Go to selected / pointer<kbd>G</kbd></button>
+        </div>
+      </div>
+      <div class="ed-menu">
+        <button class="ed-menu-btn">Help</button>
+        <div class="ed-dd">
+          <button data-ed="help"><svg><use href="#i-help"/></svg>How to use the 3D editor<kbd>F1</kbd></button>
+          <button data-link="issues"><svg><use href="#i-github"/></svg>Report on GitHub</button>
+          <button data-link="mail"><svg><use href="#i-mail"/></svg>Email the developer</button>
+        </div>
+      </div>
+      <div class="ed-route">
+        <select id="ed-route" title="Route"></select>
+        <button class="btn ghost sm" id="ed-load"><svg><use href="#i-refresh"/></svg>Load</button>
+      </div>
+      <div class="ed-sound">
+        <label class="switch" title="Hear the route around the camera"><input type="checkbox" id="ed-snd-on"><span></span>Route sound</label>
+        <select id="ed-snd-src" title="Which sounds play">
+          <option value="ssource">ssource.dat sounds (placed)</option>
+          <option value="ttype">Track sounds (ttype.dat regions)</option>
+          <option value="all">All route sounds</option>
+        </select>
+        <select id="ed-snd-mode" title="How they play">
+          <option value="file">As the .sms files define</option>
+          <option value="nearest">Nearest sound only</option>
+          <option value="solo">Selected sound only</option>
+        </select>
+        <input type="range" id="ed-snd-vol" min="0" max="1" step="0.05" value="0.6" title="Master volume">
+        <label class="spd" id="ed-speed-wrap" title="Track sounds in ttype.dat are speed-controlled: they play for a train passing at this speed">Train
+          <input type="range" id="ed-speed" min="0" max="160" step="5" value="60"><b id="ed-speed-lbl">60 km/h</b></label>
+      </div>
+      <div class="ed-save">
+        <span class="ed-pending" id="ed-pending">No changes</span>
+        <button class="btn sm" id="ed-save-btn" disabled><svg><use href="#i-save"/></svg>Save</button>
+      </div>
+    </div>
+
+    <div class="ed-body">
+      <aside class="ed-left card">
+        <div class="ed-tabs"><button class="active" data-lt="sounds">Sounds</button><button data-lt="stations">Stations</button></div>
+        <div class="ed-lt" id="lt-sounds">
+          <div class="search sm"><svg><use href="#i-search"/></svg><input type="search" id="ed-snd-search" placeholder="Find a sound by name…" spellcheck="false"></div>
+          <div class="ed-filter">
+            <label>Near station</label>
+            <select id="ed-near-st"><option value="">Around the camera</option></select>
+            <label>Radius <b id="ed-radius-lbl">5 km</b></label>
+            <input type="range" id="ed-radius" min="0.5" max="50" step="0.5" value="5">
+            <label class="chk"><input type="checkbox" id="ed-group"> Group same sound (slide through places)</label>
+            <label class="chk"><input type="checkbox" id="ed-show-regions"> Include track-sound regions</label>
+          </div>
+          <div class="ed-count muted small" id="ed-snd-count"></div>
+          <div class="ed-list" id="ed-snd-list"></div>
+        </div>
+        <div class="ed-lt" id="lt-stations" hidden>
+          <div class="search sm"><svg><use href="#i-search"/></svg><input type="search" id="ed-st-search" placeholder="Find a station…" spellcheck="false"></div>
+          <div class="ed-list" id="ed-st-list"></div>
+        </div>
+      </aside>
+
+      <div class="ed-view" id="ed-view">
+        <canvas id="ed-canvas" tabindex="0"></canvas>
+        <div class="ed-labels" id="ed-labels"></div>
+        <div class="ed-empty" id="ed-empty">
+          <div class="emblem emblem-sm"><span class="ring r1"></span><span class="ring r2"></span><img src="img/logo.png" alt=""></div>
+          <b>Pick a route and press Load</b>
+          <span class="muted small">Terrain, track, stations and every placed sound appear in 3D.</span>
+        </div>
+        <div class="ed-loading" id="ed-loading" hidden><span class="spinner"><span class="wheel"></span><span class="sig"><i></i><i></i><i></i></span></span><span id="ed-loading-txt">Loading route…</span></div>
+        <div class="ed-hud" id="ed-hud"></div>
+        <div class="ed-compass" id="ed-compass"><span>N</span></div>
+        <div class="ed-mode-pill" id="ed-mode-pill">3D</div>
+        <div class="ed-pad" id="ed-pad">
+          <div class="pad-grid">
+            <button data-hold="rotl" title="Rotate left (Q)"><svg><use href="#i-rotl"/></svg></button>
+            <button data-hold="fwd" title="Forward (↑ / W) – hold Shift for 2×"><svg><use href="#i-arrow"/></svg></button>
+            <button data-hold="rotr" title="Rotate right (E)"><svg><use href="#i-rotr"/></svg></button>
+            <button data-hold="left" title="Move left (← / A)"><svg style="transform:rotate(-90deg)"><use href="#i-arrow"/></svg></button>
+            <button data-hold="fast" class="fast" title="2× speed (Shift)">2×</button>
+            <button data-hold="right" title="Move right (→ / D)"><svg style="transform:rotate(90deg)"><use href="#i-arrow"/></svg></button>
+            <button data-hold="tiltu" title="Look up (T)">⤒</button>
+            <button data-hold="back" title="Backward (↓ / S)"><svg style="transform:rotate(180deg)"><use href="#i-arrow"/></svg></button>
+            <button data-hold="tiltd" title="Look down (G)">⤓</button>
+          </div>
+          <div class="pad-col">
+            <button data-hold="up" title="Up (R / PageUp)">Up</button>
+            <button data-hold="down" title="Down (F / PageDown)">Down</button>
+            <button data-hold="zin" title="Zoom in (+)">＋</button>
+            <button data-hold="zout" title="Zoom out (−)">－</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="ed-right card">
+        <div class="ed-panel" id="ed-pointer-panel">
+          <div class="card-title"><svg><use href="#i-target"/></svg>Pointer node</div>
+          <div class="muted small" id="ed-pointer-info">Click the ground to drop the pointer where a sound should go.</div>
+          <div class="field"><label>Sound to place (from ssource.dat)</label>
+            <input type="search" id="ed-place-search" placeholder="Search ssource.dat…" spellcheck="false">
+            <select id="ed-place-sel" size="6"></select>
+          </div>
+          <button class="btn big" id="ed-place-btn" disabled><svg><use href="#i-pin"/></svg>Place sound at pointer</button>
+        </div>
+        <div class="ed-panel" id="ed-sel-panel" hidden>
+          <div class="card-title"><svg><use href="#i-volume"/></svg>Selected sound</div>
+          <div id="ed-sel-info"></div>
+          <div class="ed-slide" id="ed-slide"></div>
+          <div class="row wrap" style="margin-top:10px">
+            <button class="btn ghost sm" data-ed="home"><svg><use href="#i-target"/></svg>Go to</button>
+            <button class="btn ghost sm" id="ed-sel-mute"><svg><use href="#i-mute"/></svg>Mute</button>
+            <button class="btn ghost sm" id="ed-sel-solo"><svg><use href="#i-volume"/></svg>Listen alone</button>
+            <button class="btn sm danger-btn" id="ed-sel-remove"><svg><use href="#i-trash"/></svg>Remove</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ HELP & REPORT (v1.1) ============ -->
+  <section class="tab-page" id="page-help">
+    <div class="help-grid">
+      <nav class="help-nav card">
+        <a href="#h-start">Getting started</a><a href="#h-make">Make announcements</a><a href="#h-route">Route manager</a>
+        <a href="#h-3d">3D Sound Placement</a><a href="#h-keys">Controls &amp; keys</a><a href="#h-place">Place, select, remove</a>
+        <a href="#h-hear">Hearing the route</a><a href="#h-save">Save, undo, exit</a><a href="#h-files">What changes on disk</a>
+        <a href="#h-gpu">Graphics &amp; speed</a><a href="#h-report">Report a problem</a>
+      </nav>
+      <div class="help-body card" id="help-body">
+        <h2 id="h-start">Getting started</h2>
+        <p>1. Open <b>Settings</b> and pick your MSTS / Open Rails folder (the one with <code>ROUTES</code>). 2. Make announcements in <b>Single</b> or <b>Batch</b>. 3. Place them on the route in <b>3D Sound Placement</b>, listen, and <b>Save</b>.</p>
+        <h2 id="h-make">Make announcements (Single / Batch)</h2>
+        <p>Drop an audio file, name it, and choose <b>Smart Direct Route Integration</b>. The app writes <code>Name.wav</code> (16-bit PCM) and <code>Name.sms</code> into the route's <code>SOUND</code> folder and adds a line to <code>ssource.dat</code> (a copy is kept as <code>ssource.dat.bak</code>). The new sound then appears in the <i>Sound to place</i> list of the 3D editor and in TSRE5.</p>
+        <p><b>Same name already there?</b> You are asked before anything is overwritten. In a batch, repeated names get <code>_2</code>, <code>_3</code>. A name already in <code>ssource.dat</code> is never added twice.</p>
+        <h2 id="h-route">Route Announcement Manager</h2>
+        <p>Shows every <code>ssource.dat</code> entry with playback and format checks. <b>Replace Audio</b> swaps only the <code>.wav</code>; the old file is kept in <code>%LOCALAPPDATA%\StationAnnouncementMaker\replaced</code>.</p>
+        <h2 id="h-3d">3D Sound Placement</h2>
+        <p>Pick a route and press <b>Load</b>. You see the real terrain (from the route's <code>TILES</code>), the track (from the <code>.tdb</code>), every station, and every placed sound (from the <code>WORLD\*.ws</code> files) — the same data TSRE5 and Open Rails use. Look around 360° by dragging with the mouse. <b>Map view</b> (M) looks straight down for quick travel.</p>
+        <h2 id="h-keys">Controls &amp; keys</h2>
+        <table class="keys">
+          <tr><td><kbd>↑</kbd> / <kbd>W</kbd></td><td>Move forward</td><td><kbd>↓</kbd> / <kbd>S</kbd></td><td>Move back</td></tr>
+          <tr><td><kbd>←</kbd> / <kbd>A</kbd></td><td>Move left</td><td><kbd>→</kbd> / <kbd>D</kbd></td><td>Move right</td></tr>
+          <tr><td><kbd>Q</kbd> / <kbd>E</kbd></td><td>Rotate left / right</td><td><kbd>T</kbd> / <kbd>G</kbd></td><td>Look up / down</td></tr>
+          <tr><td><kbd>R</kbd> / <kbd>PgUp</kbd></td><td>Go up</td><td><kbd>F</kbd> / <kbd>PgDn</kbd></td><td>Go down</td></tr>
+          <tr><td><kbd>Shift</kbd> + any move</td><td>2× speed</td><td><kbd>+</kbd> / <kbd>−</kbd> / wheel</td><td>Zoom in / out</td></tr>
+          <tr><td>Drag (left or right button)</td><td>Look around 360°</td><td><kbd>V</kbd> / <kbd>M</kbd></td><td>3D view / Map view</td></tr>
+          <tr><td>Click ground</td><td>Drop the pointer node</td><td>Click a sound</td><td>Select it (highlighted amber)</td></tr>
+          <tr><td><kbd>Delete</kbd></td><td>Remove selected sound</td><td><kbd>Esc</kbd></td><td>Clear selection / pointer</td></tr>
+          <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Save</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>Undo</td></tr>
+          <tr><td><kbd>G</kbd> (with a selection)</td><td>Go to it</td><td><kbd>L</kbd></td><td>Labels on / off</td></tr>
+        </table>
+        <p>The on-screen pad does the same: hold a button to keep moving; the <b>2×</b> button doubles the speed. Movement speed grows with height above the ground.</p>
+        <h2 id="h-place">Place, select, remove</h2>
+        <ul>
+          <li><b>Place:</b> click the ground — a cyan <b>pointer node</b> appears with its position, tile, ground height and the nearest stations. Pick a sound from the <i>Sound to place</i> list (these are the route's <code>ssource.dat</code> entries) and press <b>Place sound at pointer</b>. New sounds are green until saved.</li>
+          <li><b>Select:</b> click a sound in the view, or click its name in the <b>Sounds</b> list. The selection turns <b>amber</b> and its rings are drawn on the ground: <span class="ring-key a"></span> activation distance, <span class="ring-key s"></span> where it starts playing (<code>Distance_Dec_Past</code>), <span class="ring-key r"></span> where it stops (<code>Distance_Inc_Past</code>) and <span class="ring-key c"></span> where its volume curve reaches silence — all read from that sound's own <code>.sms</code>.</li>
+          <li><b>Same sound in many places:</b> the selected panel shows <i>Used at N places</i> with ◀ ▶ to slide through each place. Tick <i>Group same sound</i> in the list to see them together.</li>
+          <li><b>Filter by area:</b> choose a station in <i>Near station</i> (sorted nearest first) and set the radius. Every sound always shows the nearest station names.</li>
+          <li><b>Remove:</b> select and press <b>Remove</b> (or <kbd>Delete</kbd>). Removed sounds are shown crossed out until you save.</li>
+        </ul>
+        <h2 id="h-hear">Hearing the route</h2>
+        <p>Switch on <b>Route sound</b> and move around. Choose <b>which</b> sounds play: placed <code>ssource.dat</code> sounds, track sounds from <code>ttype.dat</code> (played at each sound region), or all. Choose <b>how</b>: exactly as the <code>.sms</code> files define, only the nearest one, or only the selected one.</p>
+        <p>"As the files define" follows each <code>.sms</code>: the sound wakes inside its <b>Activation</b> distance and sleeps beyond its <b>Deactivation</b> distance; a <code>StartLoop</code> stream starts when you come closer than its <code>Distance_Dec_Past</code> value and stops when you move further than its <code>Distance_Inc_Past</code> value; its loudness follows the <code>DistanceControlled</code> <b>VolumeCurve</b> and <b>Volume</b>; direction comes from where it stands (3D sound). Every sound bar in the list shows its live level, distance and state. Mute any sound with its speaker button.</p>
+        <h2 id="h-save">Save, undo, exit</h2>
+        <p><b>Save</b> (Ctrl+S) writes all placed and removed sounds. <b>Undo</b> (Ctrl+Z) steps back through unsaved changes. <b>Reload</b> re-reads the route from disk. <b>Exit editor</b> asks to save if anything is unsaved. Unsaved changes are counted on the tab and next to the Save button.</p>
+        <h2 id="h-files">What changes on disk</h2>
+        <p>Placed sounds live in <code>&lt;route&gt;\WORLD\w-XXXXXX+ZZZZZZ.ws</code> (one file per 2 km tile), exactly as TSRE5 writes them: a <code>Soundsource ( Position ( x y z ) FileName ( name.sms ) UiD ( n ) )</code> block, UTF-16 text. New sounds get the next free UiD of that tile (100000 and up). Track sound regions (<code>Soundregion</code>) and everything else in the file are left exactly as they were. Before the first change to a file it is copied to <code>%LOCALAPPDATA%\StationAnnouncementMaker\world-backups\&lt;route&gt;\&lt;date-time&gt;</code>. Restart TSRE5 / Open Rails to see changes there.</p>
+        <h2 id="h-gpu">Graphics &amp; speed</h2>
+        <p>Before the window opens the app checks your graphics drivers: a dedicated GPU (NVIDIA / AMD Radeon RX / Intel Arc) with a driver is used for the 3D view; otherwise the built-in graphics chip; with no driver at all it falls back to software drawing (slower). You can force a choice in <b>Settings → Graphics</b> (applies on next start). Only the tiles near the camera are loaded, so even very large routes stay smooth.</p>
+        <h2 id="h-report">Report a problem</h2>
+        <p>Tell us what you did, what you expected and what happened. The email is pre-filled with your app, Windows and Python versions.</p>
+        <div class="help-actions">
+          <button class="btn" data-link="issues"><svg><use href="#i-github"/></svg>Report on GitHub</button>
+          <button class="btn mail" data-link="mail"><svg><use href="#i-mail"/></svg>Email the developer</button>
+          <button class="btn ghost" data-link="releases"><svg><use href="#i-refresh"/></svg>Check for updates</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ SETTINGS ============ -->
   <section class="tab-page" id="page-settings">
     <div class="settings-grid">
@@ -214,6 +427,16 @@
         <div class="field"><label>Motion</label>
           <div class="seg" data-key="motion"><button data-v="full">Full</button><button data-v="reduced">Reduced</button></div></div>
       </div>
+      <div class="card">
+        <div class="card-title"><svg><use href="#i-cube"/></svg>Graphics &amp; 3D editor</div>
+        <div class="field"><label>Graphics chip for the 3D view (next start)</label>
+          <div class="seg" data-key="gpu"><button data-v="auto">Auto</button><button data-v="high">Dedicated GPU</button><button data-v="low">Integrated</button></div></div>
+        <div class="muted small" id="set-gpu-info">Checking…</div>
+        <label class="toggle-row" style="margin-top:14px"><span><b>Back up world files</b><br><span class="muted small">Copy each <span class="mono">.ws</span> before the 3D editor changes it</span></span>
+          <input type="checkbox" class="toggle" id="set-backup-world"></label>
+        <div class="field"><label>TSRE5.exe</label>
+          <div class="row"><div class="path-box mono" id="set-tsre">Not found</div><button class="btn ghost" id="set-tsre-browse"><svg><use href="#i-folder"/></svg></button></div></div>
+      </div>
     </div>
   </section>
 
@@ -259,12 +482,13 @@
   </section>
 </main>
 
-<footer class="app-footer"><span class="mono">v1.0.0</span><span>Made in Bharat <span class="flag-emoji" hidden>🇮🇳</span><svg class="flag" viewBox="0 0 30 20" style="stroke:none"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".6"/><circle cx="15" cy="10" r=".5" fill="#000080"/></svg></span><span class="muted">by Piscongentine</span><a href="#" class="foot-link" data-link="issues">Report an issue</a><a href="#" class="foot-link" data-link="mail">Email</a></footer>
+<footer class="app-footer"><span class="mono">v1.1.0</span><span>Made in Bharat <span class="flag-emoji" hidden>🇮🇳</span><svg class="flag" viewBox="0 0 30 20" style="stroke:none"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".6"/><circle cx="15" cy="10" r=".5" fill="#000080"/></svg></span><span class="muted">by Piscongentine</span><a href="#" class="foot-link" data-link="issues">Report an issue</a><a href="#" class="foot-link" data-link="mail">Email</a></footer>
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>
 
 <script src="audio.js"></script>
 <script src="app.js"></script>
+<script src="editor.js"></script>
 </body>
 </html>

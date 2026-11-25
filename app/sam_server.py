@@ -8,6 +8,7 @@ file system work: folders, routes, .wav/.sms writing and ssource.dat edits.
 import base64
 import json
 import os
+import re
 import secrets
 import shutil
 import socket
@@ -26,7 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mstsfiles as M  # noqa: E402
 
 APP_NAME = "Station Announcement Maker"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 HERE = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.normpath(os.path.join(HERE, "..", "ui"))
 DATA_DIR = os.environ.get("SAM_DATA_DIR") or os.path.join(
@@ -81,6 +82,9 @@ DEFAULTS = {
     "motion": "full",         # full | reduced
     "lastRoute": "",
     "ffmpeg": "",
+    "gpu": "auto",            # auto | high | low  (3D view graphics chip)
+    "tsrePath": "",
+    "backupWorld": True,
 }
 
 TOKEN = secrets.token_urlsafe(24)
@@ -121,6 +125,9 @@ def save_settings(new):
             s[k] = max(60, min(5000, int(float(s[k]))))
         except (TypeError, ValueError):
             s[k] = DEFAULTS[k]
+    if s.get("gpu") not in ("auto", "high", "low"):
+        s["gpu"] = "auto"
+    s["backupWorld"] = bool(s.get("backupWorld", True))
     try:
         s["volume"] = max(0.0, min(1.0, round(float(s["volume"]), 2)))
     except (TypeError, ValueError):
@@ -170,6 +177,8 @@ def diagnostics():
         "outputWritable": can_write(s["outputFolder"]) if s["outputFolder"] else None,
         "dataDir": pretty_path(DATA_DIR),
         "edge": find_edge(),
+        "gpu": GPU_INFO or {"adapters": detect_gpus(), "choice": "(decided when the window opens)"},
+        "tsre": find_tsre(s),
     }
 
 
@@ -390,7 +399,7 @@ def state():
                 break
     return {"settings": s, "root": v, "routes": M.list_routes(s["root"]) if v.get("ok") else [],
             "detected": detected, "version": VERSION, "ytUrl": YT_URL,
-            "repo": REPO_URL, "email": SUPPORT_EMAIL}
+            "repo": REPO_URL, "email": SUPPORT_EMAIL, "tsre": find_tsre(s)}
 
 # ------------------------------------------------------------------ HTTP
 
@@ -551,6 +560,8 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("cannot read that file")
             text, enc = M.read_text(p)
             return {"text": text, "encoding": enc}
+        if path.startswith("/api/world/") or path.startswith("/api/tsre/"):
+            return world_api(path, req)
         raise ValueError("unknown action " + path)
 
 
@@ -584,6 +595,177 @@ def existing_instance():
     return None
 
 
+# ------------------------------------------------------------------ v1.1: 3D sound placement
+
+def _route_arg(req):
+    route = req.get("route", "")
+    if not M.is_route(route):
+        raise ValueError("not a route folder")
+    if not allowed_path(route):
+        _extra_dirs.add(route)
+    return route
+
+
+def find_tsre(s=None):
+    s = s or load_settings()
+    cands = [s.get("tsrePath") or "", r"C:\OR\tsre\TSRE5.exe"]
+    if s.get("root"):
+        cands += [os.path.join(s["root"], "tsre", "TSRE5.exe"), os.path.join(s["root"], "TSRE5", "TSRE5.exe")]
+    for c in cands:
+        if c and os.path.isfile(c):
+            return c
+    return ""
+
+
+def _tsre_settings(exe):
+    p = os.path.join(os.path.dirname(exe), "settings.txt")
+    vals = {}
+    if os.path.isfile(p):
+        with open(p, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                m = re.match(r"\s*(gameRoot|routeName|startTileX|startTileY)\s*=\s*(.*?)\s*$", line)
+                if m:
+                    vals[m.group(1)] = m.group(2)
+    return p, vals
+
+
+def _tsre_apply(settings_path, new):
+    """Set keys in TSRE5's settings.txt. TSRE 0.6 breaks on // comments, so lines are written plain.
+    A copy is kept as settings.txt.SAM_backup."""
+    with open(settings_path, encoding="utf-8", errors="replace") as f:
+        lines = f.read().splitlines()
+    shutil.copy2(settings_path, settings_path + ".SAM_backup")
+    done = set()
+    for i, line in enumerate(lines):
+        m = re.match(r"\s*#?\s*(gameRoot|routeName|startTileX|startTileY)\s*=", line)
+        if m and m.group(1) in new and m.group(1) not in done:
+            lines[i] = f"{m.group(1)} = {new[m.group(1)]}"
+            done.add(m.group(1))
+    for k, v in new.items():
+        if k not in done:
+            lines.append(f"{k} = {v}")
+    with open(settings_path, "w", encoding="utf-8", newline="\n") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+def world_api(path, req):
+    import msts_world as W
+    s = load_settings()
+    if path == "/api/world/load":
+        route = _route_arg(req)
+        base, sounds, regions = W.load_route(route, s["root"])
+        ttype = W.read_ttype(route)
+        ss = M.find_ci(route, "ssource.dat")
+        entries = M.parse_ssource(ss)["entries"] if ss else []
+        names = sorted({x["file"] for x in sounds} | {e["file"] for e in entries}
+                       | {t["outside"] for t in ttype} | {t["inside"] for t in ttype}, key=str.lower)
+        return {"route": route, "routeName": os.path.basename(route), "origin": base["origin"],
+                "tiles": base["tiles"], "overview": base["overview"], "stations": base["stations"],
+                "sounds": sounds, "regions": regions, "ttype": ttype, "ssource": entries,
+                "sms": W.sms_infos(route, s["root"], names), "parseSeconds": base["parseSeconds"],
+                "tsre": bool(find_tsre(s))}
+    if path == "/api/world/tiles":
+        route = _route_arg(req)
+        tiles = [(int(a), int(b)) for a, b in (req.get("tiles") or [])][:120]
+        base, _s, _r = W.load_route(route, s["root"])
+        terr = W.terrain_batch(route, tiles, int(req.get("n") or 33))
+        track = {"%d,%d" % t: base["trackPerTile"].get(t, []) for t in tiles}
+        return {"terrain": terr, "track": track}
+    if path == "/api/world/height":
+        route = _route_arg(req)
+        h = W.height_at(route, int(req["tx"]), int(req["tz"]), float(req["x"]), float(req["z"]))
+        return {"y": h}
+    if path == "/api/world/save":
+        route = _route_arg(req)
+        bdir = os.path.join(DATA_DIR, "world-backups", os.path.basename(route)) if s.get("backupWorld", True) else None
+        report = W.save_changes(route, req.get("add") or [], req.get("remove") or [], bdir)
+        log("world save", route, json.dumps(report))
+        base, sounds, regions = W.load_route(route, s["root"])
+        return {"report": report, "backupDir": bdir, "sounds": sounds}
+    if path == "/api/tsre/info":
+        exe = find_tsre(s)
+        if not exe:
+            return {"found": False}
+        sp, vals = _tsre_settings(exe)
+        return {"found": True, "exe": exe, "settings": sp, "values": vals}
+    if path == "/api/tsre/open":
+        route = _route_arg(req)
+        exe = find_tsre(s)
+        if not exe:
+            raise ValueError("TSRE5.exe not found - set its path in Settings")
+        sp, _v = _tsre_settings(exe)
+        if req.get("apply") and os.path.isfile(sp):
+            new = {"gameRoot": os.path.dirname(os.path.dirname(route)).replace("\\", "/"),
+                   "routeName": os.path.basename(route)}
+            if req.get("tile"):
+                new["startTileX"], new["startTileY"] = str(int(req["tile"][0])), str(int(req["tile"][1]))
+            _tsre_apply(sp, new)
+        subprocess.Popen([exe], cwd=os.path.dirname(exe))
+        return {"ok": True, "exe": exe}
+    raise ValueError("unknown action " + path)
+
+
+_DISCRETE = re.compile(r"nvidia|geforce|quadro|\brtx\b|radeon\s*(rx|pro|r9|r7)|\barc\s*[ab]\d|firepro", re.I)
+GPU_INFO = {}
+
+
+def detect_gpus():
+    """Graphics adapters from the registry: which have a real driver, which are dedicated."""
+    import winreg
+    out = []
+    base = r"SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}"
+    try:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, base) as k:
+            i = 0
+            while True:
+                try:
+                    sub = winreg.EnumKey(k, i)
+                except OSError:
+                    break
+                i += 1
+                if len(sub) != 4:
+                    continue
+                try:
+                    with winreg.OpenKey(k, sub) as s:
+                        desc = winreg.QueryValueEx(s, "DriverDesc")[0]
+                        try:
+                            ver = winreg.QueryValueEx(s, "DriverVersion")[0]
+                        except OSError:
+                            ver = ""
+                except OSError:
+                    continue
+                if re.search(r"basic display|basic render|remote|virtual|indirect|parsec|mirage", desc, re.I):
+                    out.append({"name": desc, "driver": ver, "dedicated": False, "basic": True})
+                else:
+                    out.append({"name": desc, "driver": ver, "dedicated": bool(_DISCRETE.search(desc)), "basic": False})
+    except OSError:
+        pass
+    return out
+
+
+def gpu_flags(pref):
+    """Pick the graphics chip for the 3D view before the window opens.
+    auto: dedicated GPU if one has a driver, else the integrated chip; software if no driver at all."""
+    gpus = detect_gpus()
+    real = [g for g in gpus if not g["basic"]]
+    dedicated = [g for g in real if g["dedicated"]]
+    flags, choice = [], ""
+    if not real:
+        flags = ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"]
+        choice = "software (no graphics driver found - install your GPU driver for smooth 3D)"
+    elif pref == "low" or (pref == "auto" and not dedicated):
+        choice = "integrated: " + ", ".join(g["name"] for g in real if not g["dedicated"]) if any(
+            not g["dedicated"] for g in real) else "default: " + real[0]["name"]
+    else:
+        if dedicated:
+            flags = ["--force-high-performance-gpu"]
+            choice = "dedicated: " + dedicated[0]["name"]
+        else:
+            choice = "integrated: " + real[0]["name"]
+    GPU_INFO.update(adapters=gpus, choice=choice, flags=flags, pref=pref)
+    return flags
+
+
 def open_window(url):
     edge = find_edge()
     prof = os.path.join(DATA_DIR, "window")
@@ -592,6 +774,8 @@ def open_window(url):
                 "--no-default-browser-check", "--disable-background-timer-throttling",
                 "--disable-renderer-backgrounding", "--disable-features=Translate,msEdgeSidebarV2",
                 "--window-size=1380,900", "--autoplay-policy=no-user-gesture-required"]
+        args += gpu_flags(load_settings().get("gpu", "auto"))
+        log("gpu", GPU_INFO.get("choice"))
         subprocess.Popen(args, creationflags=0x08000000)
     else:
         webbrowser.open(url)

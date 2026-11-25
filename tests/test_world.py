@@ -73,6 +73,20 @@ class T(unittest.TestCase):
                          [("Distance", "Dec", 500.0, "StartLoop"), ("Distance", "Inc", 510.0, "ReleaseLoopRelease")])
         self.assertEqual(d["streams"][0]["curve"], [[0.0, 1.0], [300.0, 1.0], [490.0, 0.0]])
 
+    def test_platform_label(self):
+        self.assertEqual(W.platform_label("Naihati Junction", "Naihati Junction 1"), "NAIHATI JUNCTION PF1")
+        self.assertEqual(W.platform_label("Howrah Jn.", "2"), "HOWRAH JN. PF2")
+        self.assertEqual(W.platform_label("", "Halt"), "HALT")
+
+    @unittest.skipUnless(os.path.isdir(BENGAL), "real route not present")
+    def test_platforms_pair_on_real_route(self):
+        W._cache.clear()
+        base, _s, _r = W.load_route(BENGAL, r"C:\OR")
+        pf = base["platforms"]
+        self.assertGreater(len(pf), 100)
+        nai = [p["label"] for p in pf if p["label"].startswith("NAIHATI JUNCTION PF")]
+        self.assertIn("NAIHATI JUNCTION PF1", nai)
+
     @unittest.skipUnless(os.path.isdir(BENGAL), "real route not present")
     def test_tile_names_match_real_route(self):
         tiles = {f[:-2].lower() for f in os.listdir(os.path.join(BENGAL, "TILES")) if f.endswith(".t")}

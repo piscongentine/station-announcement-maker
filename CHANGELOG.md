@@ -4,10 +4,24 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 
 | Version | Released | Download | Release page |
 |---|---|---|---|
-| **1.1.0** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.0/Station-Announcement-Maker-Setup-1.1.0.exe) | [v1.1.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.0) |
+| **1.1.1** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.1.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) | [v1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1) |
+| 1.1.0 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.0/Station-Announcement-Maker-Setup-1.1.0.exe) | [v1.1.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.0) |
 | 1.0.0 | 25 Nov 2026 | [Station-Announcement-Maker-Setup-1.0.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.0.0/Station-Announcement-Maker-Setup-1.0.0.exe) | [v1.0.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.0.0) |
 
 Always the newest: **[Station-Announcement-Maker-Setup.exe](https://github.com/piscongentine/station-announcement-maker/releases/latest/download/Station-Announcement-Maker-Setup.exe)**. Setup updates an installed copy in place, and your settings are kept.
+
+---
+
+## 1.1.1 · 26 Nov 2026
+
+[⬇️ Download 1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) · [Release page](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1)
+
+### New
+- **Platform markers, Track Viewer style.**
+  - Every platform in the route's `.tdb` is drawn in the 3D and Map views as an empty rectangular box with a border. It runs between its two platform markers, which are paired through `PlatformTrItemData`.
+  - Each platform is labelled like the Track Viewer: **NAIHATI JUNCTION PF1** with **PLATFORM** written under it. Bengal V5 shows 528 platforms.
+  - Clicking a platform label selects its station; that station's platforms turn amber.
+- **Tidier labels.** Station, platform and sound labels now slide aside instead of covering each other. The selected sound always keeps its place.
 
 ---
 

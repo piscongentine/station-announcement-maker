@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mstsfiles as M  # noqa: E402
 
 APP_NAME = "Station Announcement Maker"
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.normpath(os.path.join(HERE, "..", "ui"))
 DATA_DIR = os.environ.get("SAM_DATA_DIR") or os.path.join(
@@ -661,6 +661,7 @@ def world_api(path, req):
                        | {t["outside"] for t in ttype} | {t["inside"] for t in ttype}, key=str.lower)
         return {"route": route, "routeName": os.path.basename(route), "origin": base["origin"],
                 "tiles": base["tiles"], "overview": base["overview"], "stations": base["stations"],
+                "platforms": base.get("platforms", []),
                 "sounds": sounds, "regions": regions, "ttype": ttype, "ssource": entries,
                 "sms": W.sms_infos(route, s["root"], names), "parseSeconds": base["parseSeconds"],
                 "tsre": bool(find_tsre(s))}

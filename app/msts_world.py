@@ -147,6 +147,18 @@ _PLAT = re.compile(r"(PlatformItem|SidingItem)\s*\((.*?)\n\t\t\)", re.S)
 _RDATA = re.compile(r"TrItemRData\s*\(\s*([-\d.eE+]+)\s+([-\d.eE+]+)\s+([-\d.eE+]+)\s+(-?\d+)\s+(-?\d+)")
 _PNAME = re.compile(r'(?:PlatformName|SidingName)\s*\(\s*"?([^")]*)"?\s*\)')
 _STATION = re.compile(r'Station\s*\(\s*"?([^")]*)"?\s*\)')
+_ITEMID = re.compile(r"TrItemId\s*\(\s*(\d+)\s*\)")
+_PDATA = re.compile(r"PlatformTrItemData\s*\(\s*(\w+)\s+(\d+)\s*\)")
+
+
+def platform_label(station, name):
+    """Track Viewer style: "NAIHATI PF1". Platform names are like "Howrah Jn. 1" or just "2"."""
+    st = (station or "").strip()
+    nm = (name or "").strip()
+    m = re.search(r"(\d+[A-Za-z]?)\s*$", nm)
+    if m and st:
+        return f"{st.upper()} PF{m.group(1).upper()}"
+    return (nm or st).upper()
 
 
 def find_tdb(route):
@@ -185,7 +197,9 @@ def parse_tdb(path):
             continue
         pn = _PNAME.search(body)
         st = _STATION.search(body)
+        iid, pd = _ITEMID.search(body), _PDATA.search(body)
         plats.append({
+            "id": int(iid.group(1)) if iid else None, "partner": int(pd.group(2)) if pd else None,
             "kind": "platform" if m.group(1) == "PlatformItem" else "siding",
             "name": (pn.group(1) if pn else "").strip(),
             "station": (st.group(1) if st else "").strip(),
@@ -497,8 +511,19 @@ def load_route(route, root=None):
             gy = sum(p["y"] for p in s["pts"]) / len(s["pts"])
             st_list.append({"name": s["name"], "platforms": s["n"], "x": round(gx, 1), "y": round(gy, 2), "z": round(gz, 1)})
         st_list.sort(key=lambda s: s["name"].lower())
+        # platforms: pair the two end markers (PlatformTrItemData partner) into one segment
+        by_id = {p["id"]: p for p in plats if p["kind"] == "platform" and p["id"] is not None}
+        pf_list, seen = [], set()
+        for p in by_id.values():
+            q = by_id.get(p["partner"])
+            if not q or p["id"] in seen:
+                continue
+            seen.update((p["id"], q["id"]))
+            g = lambda e: (round((e["tx"] - origin[0]) * TILE + e["x"], 2), round(e["y"], 2), round((e["tz"] - origin[1]) * TILE + e["z"], 2))  # noqa: E731
+            pf_list.append({"name": p["name"], "station": p["station"], "label": platform_label(p["station"], p["name"]),
+                            "a": g(p), "b": g(q)})
         base = {"origin": origin, "tiles": sorted(tiles), "trackPerTile": per_tile, "overview": overview,
-                "stations": st_list, "parseSeconds": round(time.time() - t0, 2)}
+                "stations": st_list, "platforms": pf_list, "parseSeconds": round(time.time() - t0, 2)}
         with _cache_lock:
             _cache.clear()
             _cache[key] = base

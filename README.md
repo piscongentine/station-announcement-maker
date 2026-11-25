@@ -51,7 +51,9 @@ a 16-bit PCM WAV, a matching <code>.sms</code> and the <code>ssource.dat</code> 
 
 Setup updates an installed copy in place and keeps your settings. Older versions stay downloadable in the **[update log](CHANGELOG.md)**.
 
-## 🆕 What's new in 1.1.0: 3D Sound Placement
+## 🆕 What's new in 1.1: 3D Sound Placement
+
+- 🚉 **1.1.1:** platforms are drawn as empty boxes and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Labels no longer overlap.
 
 - 🧭 **The route in 3D, 360°.** Real terrain, track, stations and every placed sound, read from the route's own files.
   - Fly with ↑ ↓ ← → (Shift = 2×), rotate with Q/E, go up and down with R/F, zoom with +/−.

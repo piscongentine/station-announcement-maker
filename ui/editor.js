@@ -173,7 +173,26 @@ function groundAt(gx, gz) {
 }
 
 /* ------------------------------------------------------------------ dynamic geometry: sounds, rings, pointer */
-let soundBuf = null, soundCount = 0, overlayLines = null, overviewLines = null;
+let soundBuf = null, soundCount = 0, overlayLines = null, overviewLines = null, platformLines = null;
+
+/* platforms: an empty rectangular box (border only) along the two platform markers, like the Track Viewer */
+const PF_HALF = 3.5;
+function platformBox(p) {
+  const [ax, ay, az] = p.a, [bx, by, bz] = p.b;
+  let dx = bx - ax, dz = bz - az; const L = Math.hypot(dx, dz) || 1; dx /= L; dz /= L;
+  const nx = -dz * PF_HALF, nz = dx * PF_HALF, y = Math.max(ay, by) + 0.9;
+  return [[ax + nx, y, az + nz], [bx + nx, y, bz + nz], [bx - nx, y, bz - nz], [ax - nx, y, az - nz]];
+}
+function buildPlatforms() {
+  if (platformLines) { gl.deleteBuffer(platformLines.buf); platformLines = null; }
+  const out = [], col = [0.93, 0.95, 1.0, 0.95];
+  for (const p of ED.data.platforms || []) {
+    if (Math.hypot(p.b[0] - p.a[0], p.b[2] - p.a[2]) < 2) continue;
+    const c = platformBox(p), sel = ED.selStation && ED.selStation.name === p.station, k = sel ? [0.96, 0.62, 0.04, 1] : col;
+    for (let i = 0; i < 4; i++) { const u = c[i], v = c[(i + 1) % 4]; out.push(u[0], u[1], -u[2], ...k, v[0], v[1], -v[2], ...k); }
+  }
+  if (out.length) platformLines = { buf: vbo(new Float32Array(out)), count: out.length / 7 };
+}
 const COL = { placed: [0.23, 0.51, 0.96, 1], route: [0.38, 0.65, 0.98, 1], region: [0.66, 0.45, 0.96, 1], sel: [0.96, 0.62, 0.04, 1],
   added: [0.06, 0.73, 0.51, 1], removed: [0.45, 0.47, 0.52, 0.55], muted: [0.55, 0.58, 0.64, 1], playing: [0.2, 0.9, 0.6, 1] };
 function soundColor(s) {
@@ -599,7 +618,7 @@ function renderStations() {
   $('#ed-st-list').innerHTML = list.map(({ s, d }) => `<div class="stitem ${ED.selStation === s ? 'sel' : ''}" data-st="${esc(s.name)}">${icon('train')}<div><b>${esc(s.name)}</b><span class="muted small">${s.platforms} platform${s.platforms > 1 ? 's' : ''} · ${km(d)}</span></div></div>`).join('');
   $$('#ed-st-list [data-st]').forEach(el => el.onclick = () => selectStation(ED.data.stations.find(s => s.name === el.dataset.st)));
 }
-function selectStation(t) { if (!t) return; ED.selStation = t; flyTo(t.x, t.z, t.y, 420, 220); rebuildOverlay(); renderStations(); }
+function selectStation(t) { if (!t) return; ED.selStation = t; buildPlatforms(); flyTo(t.x, t.z, t.y, 420, 220); rebuildOverlay(); renderStations(); }
 $('#ed-st-search').addEventListener('input', renderStations);
 function fillNearStations() {
   const cx = ED.cam.x, cz = -ED.cam.z, cur = $('#ed-near-st').value;
@@ -623,7 +642,17 @@ $('#ed-place-sel').addEventListener('change', renderPointer);
 /* ------------------------------------------------------------------ labels overlay */
 const labelPool = [];
 function label(i) { if (!labelPool[i]) { const d = document.createElement('div'); d.className = 'lbl'; $('#ed-labels').append(d); labelPool[i] = d; d.addEventListener('click', () => d._act && d._act()); } return labelPool[i]; }
+let placed = [];
+function fits(x, y, w, h) {  // keep labels from covering each other: try sliding up/down, else hide
+  for (const dy of [0, -24, 24, -48, 48, -72, 72]) {
+    const r = [x - w / 2, y + dy - h / 2, x + w / 2, y + dy + h / 2];
+    if (!placed.some(p => r[0] < p[2] && r[2] > p[0] && r[1] < p[3] && r[3] > p[1])) { placed.push(r); return dy; }
+  }
+  return null;
+}
 function drawLabels() {
+  placed = [];
+  if (ED.sel) { const p = project(glPos(ED.sel.gx, ED.sel.y + 4, ED.sel.gz)); if (p) placed.push([p[0] - 30, p[1] - 30, p[0] + displayName(ED.sel).length * 7 + 20, p[1] + 2]); }
   if (!ED.labels || !ED.data) { labelPool.forEach(l => l.style.display = 'none'); return; }
   let n = 0;
   const alt = ED.cam.y - (groundAt(ED.cam.x, -ED.cam.z) ?? 0);
@@ -633,20 +662,36 @@ function drawLabels() {
   stations.sort((a, b) => a[0] - b[0]);
   for (const [, t] of stations.slice(0, 40)) {
     const p = project(glPos(t.x, t.y + 25, t.z)); if (!p) continue;
+    const dy = fits(p[0] + 20, p[1], t.name.length * 7 + 34, 24); if (dy === null) continue;
     const l = label(n++); l.className = 'lbl st' + (ED.selStation === t ? ' sel' : '');
-    l.innerHTML = `${icon('train')}<span>${esc(t.name)}</span>`; l.style.display = ''; l.style.transform = `translate(${p[0]}px,${p[1]}px)`;
+    l.innerHTML = `${icon('train')}<span>${esc(t.name)}</span>`; l.style.display = ''; l.style.transform = `translate(${p[0]}px,${p[1] + dy}px)`;
     l._act = () => selectStation(t);
+  }
+  const pfRange = ED.mode === 'map' ? Math.max(1500, alt * 2) : 1600, pfs = [];
+  for (const p of ED.data.platforms || []) {
+    const mx = (p.a[0] + p.b[0]) / 2, mz = (p.a[2] + p.b[2]) / 2, d = Math.hypot(mx - ED.cam.x, mz + ED.cam.z);
+    if (d < pfRange) pfs.push([d, p, mx, mz]);
+  }
+  pfs.sort((a, b) => a[0] - b[0]);
+  for (const [, p, mx, mz] of pfs.slice(0, 40)) {
+    const pr = project(glPos(mx, Math.max(p.a[1], p.b[1]) + 1.2, mz)); if (!pr) continue;
+    const dy = fits(pr[0] + 30, pr[1] - 2, p.label.length * 6.6 + 22, 30); if (dy === null) continue;
+    const l = label(n++); l.className = 'lbl pf' + (ED.selStation && ED.selStation.name === p.station ? ' sel' : '');
+    l.innerHTML = `<b>${esc(p.label)}</b><small>PLATFORM</small>`; l.style.display = ''; l.style.transform = `translate(${pr[0]}px,${pr[1] + dy}px)`;
+    l._act = () => { const t = ED.data.stations.find(s => s.name === p.station); if (t) selectStation(t); };
   }
   const range = ED.mode === 'map' ? Math.max(1200, alt * 1.5) : 1800;
   const snd = nearSounds(range, 35);
   if (ED.sel && !snd.includes(ED.sel)) snd.push(ED.sel);
   for (const s of snd) {
     const p = project(glPos(s.gx, s.y + 4, s.gz)); if (!p) continue;
-    const l = label(n++); const sel = ED.sel && ED.sel.id === s.id;
+    const sel = ED.sel && ED.sel.id === s.id;
+    const dy = sel ? 0 : fits(p[0] + 20, p[1] - 14, displayName(s).length * 6.2 + 26, 26); if (dy === null) continue;
+    const l = label(n++);
     l.className = 'lbl snd' + (sel ? ' sel' : '') + (ED.removed.has(s.id) ? ' rem' : '') + (String(s.id).startsWith('new') ? ' new' : '') + (isRegion(s) ? ' reg' : '');
     const lvl = AU.levels.get(s.id) || 0;
     l.innerHTML = `<span>${esc(displayName(s))}</span><em style="--lv:${Math.round(lvl * 100)}%"></em>`;
-    l.style.display = ''; l.style.transform = `translate(${p[0]}px,${p[1] - 14}px)`;
+    l.style.display = ''; l.style.transform = `translate(${p[0]}px,${p[1] - 14 + dy}px)`;
     l._act = () => select(s);
   }
   if (ED.pointer) {
@@ -711,6 +756,7 @@ function frame(now) {
   const drawLines = L => { if (!L) return; gl.bindBuffer(gl.ARRAY_BUFFER, L.buf); gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 28, 0); gl.vertexAttribPointer(1, 4, gl.FLOAT, false, 28, 12); gl.drawArrays(gl.LINES, 0, L.count); };
   if (overviewLines && (ED.mode === 'map' || true)) drawLines(overviewLines);
   for (const t of ED.tiles.values()) drawLines(t.track);
+  drawLines(platformLines);
   gl.disable(gl.DEPTH_TEST); drawLines(overlayLines); gl.enable(gl.DEPTH_TEST);
   // sound points
   if (soundBuf && soundCount) {
@@ -882,6 +928,7 @@ async function loadRoute() {
     dirty();
     // overview track lines
     const ov = []; for (const line of d.overview) for (let i = 0; i + 5 < line.length; i += 3) ov.push(line[i], line[i + 1], line[i + 2], line[i + 3], line[i + 4], line[i + 5]);
+    buildPlatforms();
     if (overviewLines) gl.deleteBuffer(overviewLines.buf);
     overviewLines = buildLines(ov, [0.62, 0.70, 0.85, 0.7], 1.6);
     // start at the station with the most sounds nearby, looking at it

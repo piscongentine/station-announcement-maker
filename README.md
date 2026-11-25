@@ -53,6 +53,7 @@ Setup updates an installed copy in place and keeps your settings. Older versions
 
 ## 🆕 What's new in 1.1: 3D Sound Placement
 
+- ❓ **1.1.4:** a searchable glass **FAQ** with 66 answers in Help & Report. Matches are highlighted, and if nothing fits, one click asks on GitHub or by email with your question filled in.
 - 🔊 **1.1.3:** route sound is heard from the ground under the camera, so it works in Map view too. There's a ▶ Play button on the selected sound, a "nothing in range" hint, and a pulsing selection ring.
 - 🪟 **1.1.2:** platforms are shaded at 30 %, all dropdowns open as frosted glass, and the editor works on every route checked (Bengal V5, Cal, Del, RailIndia, IMPERIAL INDIAN CORRIDOR, au_great_zig_zag).
 - 🚉 **1.1.1:** platforms are drawn as boxes and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Labels no longer overlap.
@@ -78,6 +79,10 @@ Full details and a download link for every version: **[Update log](CHANGELOG.md)
 
 ## ✨ Features
 
+<p align="center">
+  <img src="docs/img/faq-search.png" alt="Help & Report: searchable FAQ with glass design" width="100%">
+</p>
+
 | | |
 |---|---|
 | 🎙 **Single** | Drop or browse one recording. MP3, M4A, OGG, FLAC and WAV are converted in the background to 22 050 / 44 100 Hz 16-bit PCM, with a live badge and a waveform player. The announcement name becomes safe `.wav` / `.sms` file names. |
@@ -88,9 +93,15 @@ Full details and a download link for every version: **[Update log](CHANGELOG.md)
 | ⚙️ **Settings** | Verified MSTS/OR folder, WAV and `.sms` defaults, backup toggle, diagnostics, Dark / Light / System theme and Full / Reduced motion. |
 | 🧭 **3D Sound Placement** | The route in 3D or Map view, with stations, track and sounds. Includes the pointer node; place / select / remove / undo / save; radius rings from each `.sms`; sound bars; and the near-station filter. |
 | 🔊 **Hear the route** | ssource.dat, ttype.dat or all sounds, played by each `.sms`'s activation distances, triggers, curves and volume, in 3D. Track sounds get a train-speed slider. |
+| ❓ **Help & Report** | A searchable **FAQ** with 66 answers in 10 categories, including real questions from users. Matches are highlighted and category chips show live counts. **Ask on GitHub** or **Email the developer** sends your search text. There is also a full **Guide** with every key and button. |
+| 🚉 **Platforms** | Every platform from the `.tdb` is drawn as a box shaded at 30 % and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Click a label to jump to the station. |
+| 🎧 **Listen anywhere** | Hear the route from the ground under the camera, even in Map view, or from the camera as Open Rails does. **▶ Play** previews any sound at once, and a hint tells you how close you must be. |
+| 🪟 **Glass design** | Dark and light themes, glass dropdowns and menus, and animated cards. Graphics use your dedicated GPU when it has a driver. |
 | 🔗 **YT → WAV** | One click opens audioforges.com to grab a WAV from a video you're allowed to use. |
 
 ## 🐞 Report an issue
+
+> 💡 Most questions are already answered in the app: **Help & Report → FAQ**. Search it first.
 
 - **On GitHub:** **[open an issue](https://github.com/piscongentine/station-announcement-maker/issues/new/choose)** and pick *Bug report* or *Feature request*.
 - **By email:** **[one-click email to shwetpurwar0911@gmail.com](mailto:shwetpurwar0911@gmail.com?subject=Station%20Announcement%20Maker%20-%20issue%20report&body=Describe%20the%20problem%3A%0A%0ASteps%20to%20reproduce%3A%0A1.%20%0A2.%20%0A%0AApp%20version%20(About%20tab)%3A%20%0AWindows%20version%3A%20)**.

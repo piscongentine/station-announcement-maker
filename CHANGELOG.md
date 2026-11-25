@@ -4,13 +4,40 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 
 | Version | Released | Download | Release page |
 |---|---|---|---|
-| **1.1.3** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.3.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.3/Station-Announcement-Maker-Setup-1.1.3.exe) | [v1.1.3](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.3) |
+| **1.1.4** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.4.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.4/Station-Announcement-Maker-Setup-1.1.4.exe) | [v1.1.4](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.4) |
+| 1.1.3 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.3.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.3/Station-Announcement-Maker-Setup-1.1.3.exe) | [v1.1.3](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.3) |
 | 1.1.2 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.2.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) | [v1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2) |
 | 1.1.1 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.1.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) | [v1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1) |
 | 1.1.0 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.0/Station-Announcement-Maker-Setup-1.1.0.exe) | [v1.1.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.0) |
 | 1.0.0 | 25 Nov 2026 | [Station-Announcement-Maker-Setup-1.0.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.0.0/Station-Announcement-Maker-Setup-1.0.0.exe) | [v1.0.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.0.0) |
 
 Always the newest: **[Station-Announcement-Maker-Setup.exe](https://github.com/piscongentine/station-announcement-maker/releases/latest/download/Station-Announcement-Maker-Setup.exe)**. Setup updates an installed copy in place, and your settings are kept.
+
+---
+
+## 1.1.4 · 26 Nov 2026
+
+[⬇️ Download 1.1.4](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.4/Station-Announcement-Maker-Setup-1.1.4.exe) · [Release page](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.4)
+
+### New: FAQ in Help & Report
+- **66 answers in 10 categories:**
+  - getting started;
+  - making announcements;
+  - routes & files;
+  - 3D Sound Placement;
+  - hearing sounds;
+  - stations & platforms;
+  - saving & safety;
+  - TSRE5 & Open Rails;
+  - install & updates;
+  - troubleshooting.
+
+  Questions real users asked are marked **Asked by a user**.
+- **Search as you type.** Short words match whole words, an exact phrase ranks highest, and common problems have extra search words ("no sound", "black screen", "duplicate"…). Matches are highlighted, the best answer opens by itself, and press **/** to jump to the search box.
+- **Category chips** with live counts and an **All** view. Help & Report is now split into **FAQ** and **Guide** (the full manual).
+- **Didn't find it?** **Ask on GitHub** opens a new issue titled with your question. **Email the developer** opens a mail with your question and the app, Windows and Python versions filled in.
+- **Design:** a glass hero with slowly moving colour orbs, a glowing glass search bar, glass chips, animated accordion cards with a gradient edge when open, and an "Ask us" card with a rotating gradient border. Works in the dark and light themes and honours Reduced motion.
+- **Deep link:** `#help&q=no sound` opens the FAQ already searched.
 
 ---
 

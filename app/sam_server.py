@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mstsfiles as M  # noqa: E402
 
 APP_NAME = "Station Announcement Maker"
-VERSION = "1.1.3"
+VERSION = "1.1.4"
 HERE = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.normpath(os.path.join(HERE, "..", "ui"))
 DATA_DIR = os.environ.get("SAM_DATA_DIR") or os.path.join(
@@ -55,12 +55,13 @@ def pretty_path(p):
     return p
 
 
-def mail_link():
+def mail_link(question=""):
     import platform
-    subject = f"{APP_NAME} v{VERSION} - issue report"
+    question = (question or "").strip()[:200]
+    subject = f"{APP_NAME} v{VERSION} - " + (f"question: {question}" if question else "issue report")
     nl = chr(10)
     body = nl.join([
-        "Describe the problem:", "", "",
+        f"My question: {question}" if question else "Describe the problem:", "", "",
         "Steps to reproduce:", "1. ", "2. ", "",
         "Expected:", "", "Actual:", "", "",
         "---",
@@ -536,8 +537,15 @@ class Handler(BaseHTTPRequestHandler):
             return diagnostics()
         if path == "/api/open-link":
             key = req.get("key", "")
+            question = str(req.get("question") or "").strip()[:200]
             if key == "mail":
-                os.startfile(mail_link())
+                os.startfile(mail_link(question))
+            elif key == "issues" and question:
+                import platform
+                body = (f"**Question:** {question}\n\n**More details:**\n\n\n---\n"
+                        f"{APP_NAME} v{VERSION} | Windows {platform.version()} | Python {sys.version.split()[0]}")
+                webbrowser.open(REPO_URL + "/issues/new?" + urllib.parse.urlencode(
+                    {"title": "Question: " + question, "labels": "question", "body": body}, quote_via=urllib.parse.quote))
             elif key in LINKS:
                 webbrowser.open(LINKS[key])
             else:

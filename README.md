@@ -53,6 +53,7 @@ Setup updates an installed copy in place and keeps your settings. Older versions
 
 ## 🆕 What's new in 1.1: 3D Sound Placement
 
+- 🔊 **1.1.3:** route sound is heard from the ground under the camera, so it works in Map view too. There's a ▶ Play button on the selected sound, a "nothing in range" hint, and a pulsing selection ring.
 - 🪟 **1.1.2:** platforms are shaded at 30 %, all dropdowns open as frosted glass, and the editor works on every route checked (Bengal V5, Cal, Del, RailIndia, IMPERIAL INDIAN CORRIDOR, au_great_zig_zag).
 - 🚉 **1.1.1:** platforms are drawn as boxes and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Labels no longer overlap.
 

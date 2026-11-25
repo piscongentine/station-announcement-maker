@@ -176,3 +176,5 @@ table.keys td:nth-child(odd){white-space:nowrap}
   select[size] option{margin:1px 0;padding:6px 10px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
 [data-motion=reduced] ::picker(select){transition:none}
+.ed-hud .hint{color:#FDE68A;background:rgba(120,53,15,.78)}
+.btn.ok{background:var(--ok)}

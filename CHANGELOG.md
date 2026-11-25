@@ -4,12 +4,29 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 
 | Version | Released | Download | Release page |
 |---|---|---|---|
-| **1.1.2** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.2.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) | [v1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2) |
+| **1.1.3** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.3.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.3/Station-Announcement-Maker-Setup-1.1.3.exe) | [v1.1.3](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.3) |
+| 1.1.2 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.2.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) | [v1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2) |
 | 1.1.1 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.1.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) | [v1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1) |
 | 1.1.0 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.0/Station-Announcement-Maker-Setup-1.1.0.exe) | [v1.1.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.0) |
 | 1.0.0 | 25 Nov 2026 | [Station-Announcement-Maker-Setup-1.0.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.0.0/Station-Announcement-Maker-Setup-1.0.0.exe) | [v1.0.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.0.0) |
 
 Always the newest: **[Station-Announcement-Maker-Setup.exe](https://github.com/piscongentine/station-announcement-maker/releases/latest/download/Station-Announcement-Maker-Setup.exe)**. Setup updates an installed copy in place, and your settings are kept.
+
+---
+
+## 1.1.3 · 26 Nov 2026
+
+[⬇️ Download 1.1.3](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.3/Station-Announcement-Maker-Setup-1.1.3.exe) · [Release page](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.3)
+
+### Fixed
+- **Route sound stayed silent in Map view and from high up.** Distance was measured from the camera, which sits 260 m up in 3D and 900 m up in Map view, so announcements that play within 500 m never started.
+  - The route is now heard **from the ground under the camera** by default, as if you stood there. A cyan ring marks the spot.
+  - **Hear from the camera** is still there and matches how Open Rails measures.
+
+### New
+- **▶ Play** on the selected sound: plays its own `.wav` straight away, at any distance, with or without Route sound.
+- **"Nothing in range" hint:** when Route sound is on and nothing plays, the bottom bar names the nearest sound, how far it is, and the distance it plays within.
+- **Clearer selection:** a pulsing amber ring now surrounds the selected sound, together with its amber marker, label and list bar.
 
 ---
 

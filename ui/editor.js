@@ -258,6 +258,23 @@ function rebuildOverlay() {
   if (overlayLines) gl.deleteBuffer(overlayLines.buf);
   overlayLines = out.length ? { buf: vbo(new Float32Array(out)), count: out.length / 7 } : null;
 }
+let dynBuf = null;
+function dynamicLines(now) {  // per-frame: pulsing ring on the selection, and where you hear from
+  const out = [];
+  const circle = (gx, gz, y, r, col) => { const N = 40; for (let i = 0; i < N; i++) for (const k of [i, i + 1]) { const a = k / N * Math.PI * 2; out.push(gx + Math.cos(a) * r, y, -(gz + Math.sin(a) * r), ...col); } };
+  if (ED.sel) {
+    const t = (now / 900) % 1, base = ED.mode === 'map' ? Math.max(12, (ED.cam.y - ED.sel.y) * 0.03) : 10;
+    circle(ED.sel.gx, ED.sel.gz, ED.sel.y + 4, base * (1 + t * 1.6), [0.96, 0.62, 0.04, 1 - t]);
+    circle(ED.sel.gx, ED.sel.gz, ED.sel.y + 4, base * 0.9, [0.96, 0.62, 0.04, 1]);
+  }
+  if (AU.on && $('#ed-ears').value === 'ground') {
+    const e = AU.ears(), r = ED.mode === 'map' ? Math.max(8, (ED.cam.y - e.y) * 0.02) : 4;
+    circle(e.x, -e.z, e.y, r, [0.13, 0.83, 0.93, 1]); circle(e.x, -e.z, e.y, r * 0.35, [0.13, 0.83, 0.93, 1]);
+  }
+  if (dynBuf) gl.deleteBuffer(dynBuf.buf);
+  dynBuf = out.length ? { buf: vbo(new Float32Array(out)), count: out.length / 7 } : null;
+  return dynBuf;
+}
 function curveZero(curve) { if (!curve || !curve.length) return null; for (let i = 1; i < curve.length; i++) if (curve[i][1] <= 0.0001) return curve[i][0]; return null; }
 
 /* ------------------------------------------------------------------ camera */
@@ -439,6 +456,7 @@ function localFromGlobal(gx, gz) {
 
 /* ------------------------------------------------------------------ selection, pointer, place, remove */
 function select(s, fly) {
+  stopPreview();
   ED.sel = s; ED.selStation = null; renderSel(); rebuildSounds(); renderList(true);
   if (fly) flyTo(s.gx, s.gz, s.y);
 }
@@ -569,6 +587,25 @@ function renderSel() {
 $('#ed-sel-mute').onclick = () => { const s = ED.sel; if (!s) return; ED.muted.has(s.id) ? ED.muted.delete(s.id) : ED.muted.add(s.id); renderSel(); rebuildSounds(); renderList(); };
 $('#ed-sel-solo').onclick = () => { $('#ed-snd-mode').value = 'solo'; if (!$('#ed-snd-on').checked) { $('#ed-snd-on').checked = true; AU.start(); } SAM.toast('Listening to the selected sound only. Move the camera to hear it change.', 'info'); };
 $('#ed-sel-remove').onclick = removeSel;
+let preview = null;
+function stopPreview() { if (preview) { try { preview.src.stop(); } catch { /* ended */ } preview = null; } $('#ed-sel-play').innerHTML = `${icon('play')}Play`; }
+$('#ed-sel-play').onclick = async () => {
+  if (preview) { stopPreview(); return; }
+  const s = ED.sel; if (!s) return;
+  const info = smsOf(s) || {}, sm = (info.streams || []).find(x => (x.wavPaths || []).some(Boolean));
+  const path = sm && sm.wavPaths.find(Boolean);
+  if (!path) { SAM.toast('This sound has no .wav file that can be found.', 'warn'); return; }
+  try {
+    const ctx = AU.ensure(); await ctx.resume();
+    const buf = await AU.buffer(path);
+    const src = ctx.createBufferSource(), g = ctx.createGain(); src.buffer = buf;
+    g.gain.value = (info.volume ?? 1) * (sm.volume ?? 1) * +$('#ed-snd-vol').value;
+    src.connect(g); g.connect(ctx.destination); src.start();
+    preview = { src }; src.onended = () => { if (preview && preview.src === src) stopPreview(); };
+    $('#ed-sel-play').innerHTML = `${icon('pause')}Stop`;
+    SAM.toast(`Playing <b>${esc(path.split(/[\\/]/).pop())}</b> (${buf.duration.toFixed(1)} s) - straight preview, not by distance`, 'info', 3000);
+  } catch (e) { SAM.toast('Could not play: ' + esc(e.message), 'err'); }
+};
 $('#ed-place-btn').onclick = place;
 
 /* ------------------------------------------------------------------ left lists (sound bars, stations) */
@@ -713,7 +750,8 @@ function hud(fps) {
   $('#ed-hud').innerHTML = `<span>${icon('target')} tile ${tx}, ${tz}</span><span>height ${g === null ? '—' : Math.round(c.y - g) + ' m'}</span>
     <span>heading ${Math.round(head)}°</span><span>${(ED.shift || ED.fastLatch) ? '<b class="fast">2× speed</b>' : '1× speed'}</span>
     ${near ? `<span>near <b>${esc(near.name)}</b> ${km(near.d)}</span>` : ''}<span>${fps} fps · ${ED.tiles.size} tiles</span>
-    ${AU.on ? `<span class="aud">${icon('volume')} ${AU.playing.size} playing</span>` : ''}`;
+    ${AU.on ? `<span class="aud">${icon('volume')} ${AU.playing.size} playing · hearing from the ${$('#ed-ears').value === 'camera' ? 'camera' : 'ground'}</span>` : ''}
+    ${AU.on && AU.hint ? `<span class="hint">${esc(AU.hint)}</span>` : ''}`;
   $('#ed-compass').style.transform = `rotate(${-head}deg)`;
 }
 
@@ -766,7 +804,7 @@ function frame(now) {
   }
   for (const t of ED.tiles.values()) drawLines(t.track);
   drawLines(platformLines);
-  gl.disable(gl.DEPTH_TEST); drawLines(overlayLines); gl.enable(gl.DEPTH_TEST);
+  gl.disable(gl.DEPTH_TEST); drawLines(overlayLines); drawLines(dynamicLines(now)); gl.enable(gl.DEPTH_TEST);
   // sound points
   if (soundBuf && soundCount) {
     P = prog.pts; gl.useProgram(P.p);
@@ -805,7 +843,14 @@ const AU = {
     for (let i = 1; i < c.length; i++) if (d <= c[i][0]) { const [d0, v0] = c[i - 1], [d1, v1] = c[i]; return v0 + (v1 - v0) * ((d - d0) / Math.max(1e-6, d1 - d0)); }
     return c[c.length - 1][1];
   },
-  speed() { return (+$('#ed-speed').value || 0) / 3.6; },  // km/h slider -> m/s (Open Rails Speed variable)
+  speed() { return (+$('#ed-speed').value || 0) / 3.6; },  // km/h slider -> m/s
+  ears() {  // where the route is heard from: the ground under the camera (default) or the camera itself
+    const cam = ED.cam;
+    if ($('#ed-ears').value === 'camera') return { x: cam.x, y: cam.y, z: cam.z };
+    const g = groundAt(cam.x, -cam.z);
+    return { x: cam.x, y: (g ?? cam.y - 1.7) + 1.7, z: cam.z };
+  },
+  hint: '',  // km/h slider -> m/s (Open Rails Speed variable)
   apply(ss, tr, sm) {
     const a = tr.action || '';
     if (a.startsWith('StartLoop')) { ss.on = true; ss.oneShot = false; ss.wav = tr.wavs[0] || ss.wav || sm.wavs[0]; }
@@ -820,7 +865,7 @@ const AU = {
   },
   update() {
     if (!this.on || !ED.data) return;
-    const ctx = this.ensure(), L = ctx.listener, c = ED.cam, f = camForward(), t = ctx.currentTime;
+    const ctx = this.ensure(), L = ctx.listener, c = this.ears(), f = camForward(), t = ctx.currentTime;
     if (L.positionX) { L.positionX.setTargetAtTime(c.x, t, 0.05); L.positionY.setTargetAtTime(c.y, t, 0.05); L.positionZ.setTargetAtTime(c.z, t, 0.05);
       L.forwardX.setTargetAtTime(f[0], t, 0.05); L.forwardY.setTargetAtTime(f[1], t, 0.05); L.forwardZ.setTargetAtTime(f[2], t, 0.05); L.upX.value = 0; L.upY.value = 1; L.upZ.value = 0; }
     else { L.setPosition(c.x, c.y, c.z); L.setOrientation(f[0], f[1], f[2], 0, 1, 0); }
@@ -862,6 +907,14 @@ const AU = {
       this.state.set(s.id, st);
     }
     want.sort((a, b) => a.d - b.d);
+    this.hint = '';
+    if (!want.length) {
+      let best = null;
+      for (const s of this.candidates()) { if (ED.muted.has(s.id) || (mode === 'solo' && (!ED.sel || ED.sel.id !== s.id))) continue;
+        const d = Math.hypot(s.gx - c.x, s.y - c.y, -s.gz - c.z); if (!best || d < best.d) best = { s, d }; }
+      if (best) { const i = smsOf(best.s) || {}, st = (i.streams || [])[0] || {};
+        const r = st.start ?? i.activation; this.hint = `Nothing in range. Nearest: ${displayName(best.s)} ${km(best.d)} away${r ? ` - it plays within ${Math.round(r)} m` : ''}`; }
+    }
     let keep = want;
     if (mode === 'nearest') keep = want.slice(0, 1);
     keep = keep.slice(0, 16);
@@ -909,6 +962,7 @@ setInterval(() => { if (AU.on && ED.data) { try { AU.update(); } catch (e) { con
 $('#ed-speed').addEventListener('input', () => { $('#ed-speed-lbl').textContent = $('#ed-speed').value + ' km/h'; });
 function speedVis() { $('#ed-speed-wrap').hidden = $('#ed-snd-src').value === 'ssource'; }
 $('#ed-snd-src').addEventListener('change', speedVis); speedVis();
+$('#ed-ears').addEventListener('change', () => { AU.state.clear(); });
 $('#ed-snd-mode').addEventListener('change', () => { for (const v of AU.voices.values()) AU.kill(v); AU.voices.clear(); });
 
 /* ------------------------------------------------------------------ load route */

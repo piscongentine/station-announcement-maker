@@ -227,6 +227,10 @@
           <option value="nearest">Nearest sound only</option>
           <option value="solo">Selected sound only</option>
         </select>
+        <select id="ed-ears" title="Where you hear the route from">
+          <option value="ground">Hear from the ground (under camera)</option>
+          <option value="camera">Hear from the camera (like Open Rails)</option>
+        </select>
         <input type="range" id="ed-snd-vol" min="0" max="1" step="0.05" value="0.6" title="Master volume">
         <label class="spd" id="ed-speed-wrap" title="Track sounds in ttype.dat are speed-controlled: they play for a train passing at this speed">Train
           <input type="range" id="ed-speed" min="0" max="160" step="5" value="60"><b id="ed-speed-lbl">60 km/h</b></label>
@@ -307,6 +311,7 @@
           <div id="ed-sel-info"></div>
           <div class="ed-slide" id="ed-slide"></div>
           <div class="row wrap" style="margin-top:10px">
+            <button class="btn sm ok" id="ed-sel-play"><svg><use href="#i-play"/></svg>Play</button>
             <button class="btn ghost sm" data-ed="home"><svg><use href="#i-target"/></svg>Go to</button>
             <button class="btn ghost sm" id="ed-sel-mute"><svg><use href="#i-mute"/></svg>Mute</button>
             <button class="btn ghost sm" id="ed-sel-solo"><svg><use href="#i-volume"/></svg>Listen alone</button>
@@ -353,13 +358,13 @@
         <h2 id="h-place">Place, select, remove</h2>
         <ul>
           <li><b>Place:</b> click the ground — a cyan <b>pointer node</b> appears with its position, tile, ground height and the nearest stations. Pick a sound from the <i>Sound to place</i> list (these are the route's <code>ssource.dat</code> entries) and press <b>Place sound at pointer</b>. New sounds are green until saved.</li>
-          <li><b>Select:</b> click a sound in the view, or click its name in the <b>Sounds</b> list. The selection turns <b>amber</b> and its rings are drawn on the ground: <span class="ring-key a"></span> activation distance, <span class="ring-key s"></span> where it starts playing (<code>Distance_Dec_Past</code>), <span class="ring-key r"></span> where it stops (<code>Distance_Inc_Past</code>) and <span class="ring-key c"></span> where its volume curve reaches silence — all read from that sound's own <code>.sms</code>.</li>
+          <li><b>Select:</b> click a sound in the view, or click its name in the <b>Sounds</b> list. The selection turns <b>amber</b> (marker, label and list bar) with a pulsing amber ring and its rings are drawn on the ground: <span class="ring-key a"></span> activation distance, <span class="ring-key s"></span> where it starts playing (<code>Distance_Dec_Past</code>), <span class="ring-key r"></span> where it stops (<code>Distance_Inc_Past</code>) and <span class="ring-key c"></span> where its volume curve reaches silence — all read from that sound's own <code>.sms</code>.</li>
           <li><b>Same sound in many places:</b> the selected panel shows <i>Used at N places</i> with ◀ ▶ to slide through each place. Tick <i>Group same sound</i> in the list to see them together.</li>
           <li><b>Filter by area:</b> choose a station in <i>Near station</i> (sorted nearest first) and set the radius. Every sound always shows the nearest station names.</li>
           <li><b>Remove:</b> select and press <b>Remove</b> (or <kbd>Delete</kbd>). Removed sounds are shown crossed out until you save.</li>
         </ul>
         <h2 id="h-hear">Hearing the route</h2>
-        <p>Switch on <b>Route sound</b> and move around. Choose <b>which</b> sounds play: placed <code>ssource.dat</code> sounds, track sounds from <code>ttype.dat</code> (played at each sound region), or all. Choose <b>how</b>: exactly as the <code>.sms</code> files define, only the nearest one, or only the selected one.</p>
+        <p><b>Quick listen:</b> select a sound and press <b>▶ Play</b> — it plays the sound's own .wav straight away, at any distance.</p><p>Switch on <b>Route sound</b> and move around. By default you <b>hear from the ground under the camera</b> (a cyan ring marks the spot) — as if you stood there — so it also works from high up and in Map view. Choose <i>Hear from the camera</i> to measure distance from the camera itself, as Open Rails does. If nothing is in range the bottom bar tells you the nearest sound and how close you must get. Choose <b>which</b> sounds play: placed <code>ssource.dat</code> sounds, track sounds from <code>ttype.dat</code> (played at each sound region), or all. Choose <b>how</b>: exactly as the <code>.sms</code> files define, only the nearest one, or only the selected one.</p>
         <p>"As the files define" follows each <code>.sms</code>: the sound wakes inside its <b>Activation</b> distance and sleeps beyond its <b>Deactivation</b> distance; a <code>StartLoop</code> stream starts when you come closer than its <code>Distance_Dec_Past</code> value and stops when you move further than its <code>Distance_Inc_Past</code> value; its loudness follows the <code>DistanceControlled</code> <b>VolumeCurve</b> and <b>Volume</b>; direction comes from where it stands (3D sound). Every sound bar in the list shows its live level, distance and state. Mute any sound with its speaker button.</p>
         <h2 id="h-save">Save, undo, exit</h2>
         <p><b>Save</b> (Ctrl+S) writes all placed and removed sounds. <b>Undo</b> (Ctrl+Z) steps back through unsaved changes. <b>Reload</b> re-reads the route from disk. <b>Exit editor</b> asks to save if anything is unsaved. Unsaved changes are counted on the tab and next to the Save button.</p>
@@ -482,7 +487,7 @@
   </section>
 </main>
 
-<footer class="app-footer"><span class="mono">v1.1.2</span><span>Made in Bharat <span class="flag-emoji" hidden>🇮🇳</span><svg class="flag" viewBox="0 0 30 20" style="stroke:none"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".6"/><circle cx="15" cy="10" r=".5" fill="#000080"/></svg></span><span class="muted">by Piscongentine</span><a href="#" class="foot-link" data-link="issues">Report an issue</a><a href="#" class="foot-link" data-link="mail">Email</a></footer>
+<footer class="app-footer"><span class="mono">v1.1.3</span><span>Made in Bharat <span class="flag-emoji" hidden>🇮🇳</span><svg class="flag" viewBox="0 0 30 20" style="stroke:none"><rect width="30" height="20" fill="#fff"/><rect width="30" height="6.67" fill="#FF9933"/><rect y="13.33" width="30" height="6.67" fill="#138808"/><circle cx="15" cy="10" r="2.6" fill="none" stroke="#000080" stroke-width=".6"/><circle cx="15" cy="10" r=".5" fill="#000080"/></svg></span><span class="muted">by Piscongentine</span><a href="#" class="foot-link" data-link="issues">Report an issue</a><a href="#" class="foot-link" data-link="mail">Email</a></footer>
 
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="overlay" id="overlay" hidden><div class="modal" id="modal"></div></div>

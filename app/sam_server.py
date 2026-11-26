@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mstsfiles as M  # noqa: E402
 
 APP_NAME = "Station Announcement Maker"
-VERSION = "1.1.4"
+VERSION = "1.1.5"
 HERE = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.normpath(os.path.join(HERE, "..", "ui"))
 DATA_DIR = os.environ.get("SAM_DATA_DIR") or os.path.join(
@@ -208,6 +208,31 @@ def pick_folder(title, initial):
         path = filedialog.askdirectory(title=title or "Choose folder",
                                        initialdir=initial if initial and os.path.isdir(initial) else None,
                                        mustexist=True, parent=root)
+        root.destroy()
+        return os.path.normpath(path) if path else ""
+
+
+def pick_file(title, initial, filetypes):
+    """Native open-file dialog (tkinter askopenfilename). Serialised like pick_folder."""
+    with _dialog_lock:
+        import tkinter as tk
+        from tkinter import filedialog
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+        try:
+            root.iconbitmap(os.path.join(HERE, "..", "assets", "app.ico"))
+        except Exception:  # noqa: BLE001
+            pass
+        root.update()
+        idir, ifile = None, None
+        if initial:
+            if os.path.isfile(initial):
+                idir, ifile = os.path.dirname(initial), os.path.basename(initial)
+            elif os.path.isdir(initial):
+                idir = initial
+        path = filedialog.askopenfilename(title=title or "Choose file", initialdir=idir, initialfile=ifile,
+                                          filetypes=filetypes or [("All files", "*.*")], parent=root)
         root.destroy()
         return os.path.normpath(path) if path else ""
 
@@ -517,6 +542,16 @@ class Handler(BaseHTTPRequestHandler):
             if p and req.get("output"):
                 _extra_dirs.add(p)
             return {"path": p}
+        if path == "/api/pick-tsre":
+            cur = find_tsre() or load_settings().get("tsrePath") or r"C:\OR\tsre"
+            p = pick_file("Choose your TSRE executable (any name, e.g. TSRE5.exe, TSRE5_v0.7.exe)",
+                          cur, [("Executables", "*.exe"), ("All files", "*.*")])
+            if not p:
+                return {"path": ""}
+            if not p.lower().endswith(".exe") or not os.path.isfile(p):
+                raise ValueError(f"{p} is not a program (.exe)")
+            save_settings({"tsrePath": p})
+            return {"path": p, "state": state()}
         if path == "/api/routes":
             return {"routes": M.list_routes(load_settings()["root"])}
         if path == "/api/route/scan":
@@ -614,14 +649,37 @@ def _route_arg(req):
     return route
 
 
+_TSRE_EXE = re.compile(r"^tsre.*\.exe$", re.I)
+
+
+def _tsre_in(folder):
+    """Any TSRE executable in a folder, whatever it is called (TSRE5.exe, TSRE5_v0.7.exe, tsre.exe...).
+    Prefers the exact TSRE5.exe, then the newest file."""
+    try:
+        names = [n for n in os.listdir(folder) if _TSRE_EXE.match(n) and os.path.isfile(os.path.join(folder, n))]
+    except OSError:
+        return ""
+    if not names:
+        return ""
+    names.sort(key=lambda n: (n.lower() != "tsre5.exe", -os.path.getmtime(os.path.join(folder, n))))
+    return os.path.join(folder, names[0])
+
+
 def find_tsre(s=None):
+    """The user's chosen TSRE executable (any file name), else one found in the usual folders."""
     s = s or load_settings()
-    cands = [s.get("tsrePath") or "", r"C:\OR\tsre\TSRE5.exe"]
+    chosen = s.get("tsrePath") or ""
+    if chosen and os.path.isfile(chosen):
+        return chosen
+    dirs = [r"C:\OR\tsre"]
+    if chosen:
+        dirs.insert(0, chosen if os.path.isdir(chosen) else os.path.dirname(chosen))
     if s.get("root"):
-        cands += [os.path.join(s["root"], "tsre", "TSRE5.exe"), os.path.join(s["root"], "TSRE5", "TSRE5.exe")]
-    for c in cands:
-        if c and os.path.isfile(c):
-            return c
+        dirs += [os.path.join(s["root"], d) for d in ("tsre", "TSRE5", "TSRE")]
+    for d in dirs:
+        exe = _tsre_in(d) if d and os.path.isdir(d) else ""
+        if exe:
+            return exe
     return ""
 
 
@@ -701,7 +759,7 @@ def world_api(path, req):
         route = _route_arg(req)
         exe = find_tsre(s)
         if not exe:
-            raise ValueError("TSRE5.exe not found - set its path in Settings")
+            raise ValueError("TSRE not found - choose its .exe in Settings > Graphics & 3D editor")
         sp, _v = _tsre_settings(exe)
         if req.get("apply") and os.path.isfile(sp):
             new = {"gameRoot": os.path.dirname(os.path.dirname(route)).replace("\\", "/"),

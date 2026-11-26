@@ -10,8 +10,8 @@ using System.Windows.Forms;
 [assembly: System.Reflection.AssemblyProduct("Station Announcement Maker")]
 [assembly: System.Reflection.AssemblyCompany("Piscongentine")]
 [assembly: System.Reflection.AssemblyCopyright("Piscongentine")]
-[assembly: System.Reflection.AssemblyVersion("1.1.4.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.1.4.0")]
+[assembly: System.Reflection.AssemblyVersion("1.1.5.0")]
+[assembly: System.Reflection.AssemblyFileVersion("1.1.5.0")]
 
 static class Launcher
 {

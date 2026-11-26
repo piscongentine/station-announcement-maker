@@ -53,6 +53,7 @@ Setup updates an installed copy in place and keeps your settings. Older versions
 
 ## 🆕 What's new in 1.1: 3D Sound Placement
 
+- 🛠️ **1.1.5:** choose your **TSRE executable directly** (any file name, e.g. `TSRE5_v0.7.exe`) in Settings. It is also found automatically. Thanks to the tester who reported it!
 - ❓ **1.1.4:** a searchable glass **FAQ** with 66 answers in Help & Report. Matches are highlighted, and if nothing fits, one click asks on GitHub or by email with your question filled in.
 - 🔊 **1.1.3:** route sound is heard from the ground under the camera, so it works in Map view too. There's a ▶ Play button on the selected sound, a "nothing in range" hint, and a pulsing selection ring.
 - 🪟 **1.1.2:** platforms are shaded at 30 %, all dropdowns open as frosted glass, and the editor works on every route checked (Bengal V5, Cal, Del, RailIndia, IMPERIAL INDIAN CORRIDOR, au_great_zig_zag).
@@ -93,7 +94,7 @@ Full details and a download link for every version: **[Update log](CHANGELOG.md)
 | ⚙️ **Settings** | Verified MSTS/OR folder, WAV and `.sms` defaults, backup toggle, diagnostics, Dark / Light / System theme and Full / Reduced motion. |
 | 🧭 **3D Sound Placement** | The route in 3D or Map view, with stations, track and sounds. Includes the pointer node; place / select / remove / undo / save; radius rings from each `.sms`; sound bars; and the near-station filter. |
 | 🔊 **Hear the route** | ssource.dat, ttype.dat or all sounds, played by each `.sms`'s activation distances, triggers, curves and volume, in 3D. Track sounds get a train-speed slider. |
-| ❓ **Help & Report** | A searchable **FAQ** with 66 answers in 10 categories, including real questions from users. Matches are highlighted and category chips show live counts. **Ask on GitHub** or **Email the developer** sends your search text. There is also a full **Guide** with every key and button. |
+| ❓ **Help & Report** | A searchable **FAQ** with 67 answers in 10 categories, including real questions from users. Matches are highlighted and category chips show live counts. **Ask on GitHub** or **Email the developer** sends your search text. There is also a full **Guide** with every key and button. |
 | 🚉 **Platforms** | Every platform from the `.tdb` is drawn as a box shaded at 30 % and labelled like the Track Viewer (**NAIHATI JUNCTION PF1 · PLATFORM**). Click a label to jump to the station. |
 | 🎧 **Listen anywhere** | Hear the route from the ground under the camera, even in Map view, or from the camera as Open Rails does. **▶ Play** previews any sound at once, and a hint tells you how close you must be. |
 | 🪟 **Glass design** | Dark and light themes, glass dropdowns and menus, and animated cards. Graphics use your dedicated GPU when it has a driver. |

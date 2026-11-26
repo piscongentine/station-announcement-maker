@@ -3,7 +3,7 @@
 ; Build: build-setup.ps1   (or "%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" installer\StationAnnouncementMaker.iss)
 
 #define AppName "Station Announcement Maker"
-#define AppVersion "1.1.4"
+#define AppVersion "1.1.5"
 #define AppExe "Station Announcement Maker.exe"
 #define Publisher "Piscongentine"
 #define RepoUrl "https://github.com/piscongentine/station-announcement-maker"

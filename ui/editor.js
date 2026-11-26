@@ -1036,7 +1036,7 @@ $('#ed-save-btn').onclick = save;
 async function openTsre() {
   if (!ED.data) { SAM.toast('Load a route first.', 'warn'); return; }
   const info = await SAM.api('tsre/info', {});
-  if (!info.found) { SAM.toast('TSRE5.exe not found. Set it in Settings → Graphics & 3D editor.', 'warn', 6000); return; }
+  if (!info.found) { SAM.toast('TSRE not found. Choose its .exe in Settings → Graphics & 3D editor.', 'warn', 6000); return; }
   const p = ED.sel || ED.pointer, [tx, tz] = p ? [p.tx, p.tz] : camTile();
   const v = info.values || {};
   const ok = await SAM.modal(`<h3>${icon('open')}Open in TSRE5</h3><p class="lead">TSRE5 opens the route set in its <span class="mono">settings.txt</span>. Set it to this route and tile?</p>

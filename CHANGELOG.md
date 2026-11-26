@@ -4,7 +4,8 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 
 | Version | Released | Download | Release page |
 |---|---|---|---|
-| **1.1.4** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.4.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.4/Station-Announcement-Maker-Setup-1.1.4.exe) | [v1.1.4](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.4) |
+| **1.1.5** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.5.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.5/Station-Announcement-Maker-Setup-1.1.5.exe) | [v1.1.5](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.5) |
+| 1.1.4 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.4.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.4/Station-Announcement-Maker-Setup-1.1.4.exe) | [v1.1.4](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.4) |
 | 1.1.3 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.3.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.3/Station-Announcement-Maker-Setup-1.1.3.exe) | [v1.1.3](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.3) |
 | 1.1.2 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.2.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) | [v1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2) |
 | 1.1.1 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.1.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.1/Station-Announcement-Maker-Setup-1.1.1.exe) | [v1.1.1](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.1) |
@@ -12,6 +13,18 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 | 1.0.0 | 25 Nov 2026 | [Station-Announcement-Maker-Setup-1.0.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.0.0/Station-Announcement-Maker-Setup-1.0.0.exe) | [v1.0.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.0.0) |
 
 Always the newest: **[Station-Announcement-Maker-Setup.exe](https://github.com/piscongentine/station-announcement-maker/releases/latest/download/Station-Announcement-Maker-Setup.exe)**. Setup updates an installed copy in place, and your settings are kept.
+
+---
+
+## 1.1.5 · 26 Nov 2026
+
+[⬇️ Download 1.1.5](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.5/Station-Announcement-Maker-Setup-1.1.5.exe) · [Release page](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.5)
+
+### Fixed: choosing TSRE (reported by a user)
+- **Settings → TSRE executable** now opens a normal Windows *Open* window that shows `.exe` files, so you pick the TSRE program itself. Before, it asked for a folder and assumed the file was called `TSRE5.exe`, so a renamed TSRE (e.g. `TSRE5_v0.7.exe`) was never found unless you renamed it.
+- **Auto-detect:** with nothing chosen, the app finds any `TSRE*.exe` in `C:\OR\tsre` and in `tsre` / `TSRE5` / `TSRE` inside your MSTS / OR folder, preferring `TSRE5.exe`, then the newest file.
+- If the chosen file is moved or deleted, the app falls back to a TSRE in the same folder and the Settings box says when the chosen file is missing.
+- New FAQ answer: *My TSRE program is not called TSRE5.exe. How do I set it?*
 
 ---
 

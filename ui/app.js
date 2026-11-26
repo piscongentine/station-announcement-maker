@@ -596,7 +596,10 @@ function renderSettings() {
   $$('.seg').forEach(seg => $$('button', seg).forEach(b => b.classList.toggle('active', String(s[seg.dataset.key]) === b.dataset.v)));
   const setv = (id, v) => { const e = $(id); if (document.activeElement !== e) e.value = v; };
   $('#set-backup-world').checked = s.backupWorld !== false;
-  const tb = $('#set-tsre'); tb.textContent = s.tsrePath || S.tsre || 'Not found'; tb.classList.toggle('set', !!(s.tsrePath || S.tsre));
+  const tb = $('#set-tsre');
+  tb.textContent = S.tsre || (s.tsrePath ? s.tsrePath + '  (missing — choose again)' : 'Not found — click the folder button and choose your TSRE .exe');
+  tb.title = S.tsre ? (s.tsrePath && S.tsre === s.tsrePath ? 'Chosen by you' : 'Found automatically') : '';
+  tb.classList.toggle('set', !!S.tsre);
   setv('#set-act', s.activation); setv('#set-deact', s.deactivation); setv('#set-vol', s.volume);
   $('#set-backup').checked = !!s.backupSsource;
   tplPreview(); fmtChanged();
@@ -611,8 +614,10 @@ $$('.seg').forEach(seg => $$('button', seg).forEach(b => b.onclick = () => {
 $('#set-backup').onchange = e => saveSettings({ backupSsource: e.target.checked });
 $('#set-backup-world').onchange = e => saveSettings({ backupWorld: e.target.checked });
 $('#set-tsre-browse').onclick = async () => {
-  const r = await api('pick-folder', { title: 'Choose the folder that contains TSRE5.exe', initial: 'C:\\OR\\tsre' });
-  if (r.path) saveSettings({ tsrePath: r.path.replace(/[\\/]+$/, '') + '\\TSRE5.exe' });
+  try {
+    const r = await api('pick-tsre', {});
+    if (r.path) { S = r.state; renderSettings(); toast('TSRE set to <span class="mono">' + esc(r.path) + '</span>', 'ok'); }
+  } catch (e) { toast(esc(e.message), 'err'); }
 };
 $('#set-root-browse').onclick = () => pickRoot();
 $('#set-out-browse').onclick = async () => {

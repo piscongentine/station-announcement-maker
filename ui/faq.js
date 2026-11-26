@@ -81,6 +81,7 @@ const Q = [
   // ---------------- tsre
   ['tsre', 'When do I see my changes in TSRE5 or Open Rails?', 'After saving, restart TSRE5 / Open Rails or reload the route — they read ssource.dat and the .ws files when the route opens.'],
   ['tsre', 'What does "Open this place in TSRE5" do?', 'It shows what will change in TSRE5\'s settings.txt (gameRoot, routeName, start tile), keeps a backup (settings.txt.SAM_backup), writes plain lines (TSRE 0.6 breaks on // comments) and starts TSRE5 at that place. You can also just open TSRE5 without changes.'],
+  ['tsre', 'My TSRE program is not called TSRE5.exe. How do I set it?', 'Go to <b>Settings → Graphics &amp; 3D editor</b> and click the folder button next to <b>TSRE executable</b>. A normal Windows <i>Open</i> window appears, showing only <code>.exe</code> files: pick your TSRE program, whatever it is called (<code>TSRE5.exe</code>, <code>TSRE5_v0.7.exe</code>, <code>tsre.exe</code>…). No renaming needed. If you never choose one, the app looks for any <code>TSRE*.exe</code> in <code>C:\\OR\\tsre</code> and in <code>tsre</code> / <code>TSRE5</code> inside your MSTS / OR folder.', true],
   ['tsre', 'Can I still place sounds in TSRE5 itself?', 'Yes. Open the route in TSRE5, choose Sound sources, pick the name and place it. Both tools write the same format.'],
   // ---------------- install
   ['install', 'What does Setup check and install?', 'An animated check of Windows 10/11, Microsoft Edge, Python 3 with Tk, screen, sound and your MSTS/OR folder. If Python is missing it downloads the official Python 3.14.6 from python.org, checks its signature and installs it for your user only — no admin rights.'],
@@ -113,6 +114,7 @@ const TAGS = [
   [/selection change|selected sound look/i, 'colour color highlight amber orange'],
   [/blank or slow/i, 'black screen lag fps gpu graphics driver nvidia intel'],
   [/report a problem/i, 'bug contact help support email github issue'],
+  [/not called TSRE5\.exe/i, 'path exe executable rename renamed browse folder settings not found locate tsre5'],
   [/edit routes or make activities/i, 'route editor activity maker tsre'],
   [/installed and how do I remove/i, 'folder location path program files uninstall old version'],
 ];

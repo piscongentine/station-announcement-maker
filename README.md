@@ -53,6 +53,7 @@ Setup updates an installed copy in place and keeps your settings. Older versions
 
 ## 🆕 What's new in 1.1: 3D Sound Placement
 
+- 🔄 **1.1.6:** **Check for updates** now compares your version with the latest on GitHub. Up to date? It just says so. Newer version out? It opens the download page.
 - 🛠️ **1.1.5:** choose your **TSRE executable directly** (any file name, e.g. `TSRE5_v0.7.exe`) in Settings. It is also found automatically. Thanks to the tester who reported it!
 - ❓ **1.1.4:** a searchable glass **FAQ** with 66 answers in Help & Report. Matches are highlighted, and if nothing fits, one click asks on GitHub or by email with your question filled in.
 - 🔊 **1.1.3:** route sound is heard from the ground under the camera, so it works in Map view too. There's a ▶ Play button on the selected sound, a "nothing in range" hint, and a pulsing selection ring.

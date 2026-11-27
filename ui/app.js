@@ -655,12 +655,35 @@ async function runDiagnostics() {
 }
 $('#diag-refresh').onclick = runDiagnostics;
 
+/* ------------------------------------------------------------ updates
+   Asks GitHub for the latest release. Same or older -> just says so (no browser).
+   Newer -> the server opens the release page. */
+let updBusy = false;
+async function checkForUpdates(btn) {
+  if (updBusy) return;
+  updBusy = true;
+  const btns = $$('[data-link="releases"]');
+  btns.forEach(b => { b.disabled = true; b.classList.add('checking'); });
+  toast('Checking GitHub for the latest version…', 'info', 2500);
+  try {
+    const r = await api('check-update', {});
+    if (r.newer) toast(`Update available: <b>v${esc(r.latest)}</b> (you have v${esc(r.current)}). Opening the download page on GitHub…`, 'warn', 8000);
+    else toast(`You have the latest version: <b>v${esc(r.current)}</b>${r.latest !== r.current ? ` (GitHub: v${esc(r.latest)})` : ''}. Nothing to download.`, 'ok', 6000);
+  } catch (err) {
+    toast(esc(err.message), 'err', 7000);
+  } finally {
+    btns.forEach(b => { b.disabled = false; b.classList.remove('checking'); });
+    updBusy = false;
+  }
+}
+
 /* ------------------------------------------------------------ help links */
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-link]');
   if (!a) return;
   e.preventDefault();
   const key = a.dataset.link;
+  if (key === 'releases') return checkForUpdates(a);
   api('open-link', { key })
     .then(() => toast(key === 'mail' ? 'Opening your email app with a pre-filled report to <b>shwetpurwar0911@gmail.com</b>…' : 'Opened in your browser.', 'ok'))
     .catch(err => toast(esc(err.message), 'err'));

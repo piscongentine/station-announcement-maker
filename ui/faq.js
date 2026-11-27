@@ -85,7 +85,7 @@ const Q = [
   ['tsre', 'Can I still place sounds in TSRE5 itself?', 'Yes. Open the route in TSRE5, choose Sound sources, pick the name and place it. Both tools write the same format.'],
   // ---------------- install
   ['install', 'What does Setup check and install?', 'An animated check of Windows 10/11, Microsoft Edge, Python 3 with Tk, screen, sound and your MSTS/OR folder. If Python is missing it downloads the official Python 3.14.6 from python.org, checks its signature and installs it for your user only — no admin rights.'],
-  ['install', 'How do I update?', 'Download the latest <b>Station-Announcement-Maker-Setup.exe</b> from GitHub (About → Check for updates) and run it. It updates in place and keeps your settings.'],
+  ['install', 'How do I update?', 'Press <b>Check for updates</b> (About, or Help &amp; Report). The app asks GitHub for the latest version. If you already have it, it just says so and nothing opens. If a newer one exists, the GitHub download page opens: run the new <b>Station-Announcement-Maker-Setup.exe</b>. It updates in place and keeps your settings.'],
   ['install', 'Where are my settings kept?', 'In <code>%LOCALAPPDATA%\\StationAnnouncementMaker</code>: settings.json, app.log, replaced wavs and world backups. Uninstalling the app keeps them.'],
   ['install', 'How do I uninstall?', 'Windows Settings → Apps → Installed apps → Station Announcement Maker → Uninstall.'],
   // ---------------- troubleshooting
@@ -113,6 +113,7 @@ const TAGS = [
   [/radius of a sound|activation distance, deactivation/i, 'range distance how far rings trigger'],
   [/selection change|selected sound look/i, 'colour color highlight amber orange'],
   [/blank or slow/i, 'black screen lag fps gpu graphics driver nvidia intel'],
+  [/How do I update\?/i, 'check for updates new version latest upgrade download newer'],
   [/report a problem/i, 'bug contact help support email github issue'],
   [/not called TSRE5\.exe/i, 'path exe executable rename renamed browse folder settings not found locate tsre5'],
   [/edit routes or make activities/i, 'route editor activity maker tsre'],

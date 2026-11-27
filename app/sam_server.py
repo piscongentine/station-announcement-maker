@@ -27,7 +27,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import mstsfiles as M  # noqa: E402
 
 APP_NAME = "Station Announcement Maker"
-VERSION = "1.1.5"
+VERSION = "1.1.6"
 HERE = os.path.dirname(os.path.abspath(__file__))
 UI_DIR = os.path.normpath(os.path.join(HERE, "..", "ui"))
 DATA_DIR = os.environ.get("SAM_DATA_DIR") or os.path.join(
@@ -44,6 +44,37 @@ LINKS = {
     "changelog": REPO_URL + "/blob/main/CHANGELOG.md",
     "repo": REPO_URL,
 }
+
+
+def version_tuple(v):
+    """'v1.1.5' / '1.1' -> (1, 1, 5) / (1, 1, 0), so versions compare by number, not text."""
+    nums = [int(x) for x in re.findall(r"\d+", str(v or ""))[:4]]
+    return tuple(nums + [0] * (4 - len(nums)))
+
+
+def check_update():
+    """Ask GitHub for the latest release and compare it with this version.
+    Opens the release page in the browser only when GitHub has a newer version."""
+    api = REPO_URL.replace("https://github.com/", "https://api.github.com/repos/") + "/releases/latest"
+    req = urllib.request.Request(api, headers={"Accept": "application/vnd.github+json",
+                                               "User-Agent": "StationAnnouncementMaker/" + VERSION})
+    try:
+        with urllib.request.urlopen(req, timeout=8) as r:
+            data = json.load(r)
+    except Exception as e:  # noqa: BLE001
+        raise ValueError("Could not reach GitHub to check for updates. Check your internet connection and try again."
+                         ) from e
+    tag = str(data.get("tag_name") or "")
+    latest = tag.lstrip("vV")
+    if not latest:
+        raise ValueError("GitHub did not report a version")
+    newer = version_tuple(latest) > version_tuple(VERSION)
+    url = data.get("html_url") or LINKS["releases"]
+    if newer:
+        webbrowser.open(url)
+    log("update check", VERSION, "->", latest, "newer" if newer else "up to date")
+    return {"current": VERSION, "latest": latest, "newer": newer, "url": url,
+            "published": (data.get("published_at") or "")[:10]}
 
 
 def pretty_path(p):
@@ -570,6 +601,8 @@ class Handler(BaseHTTPRequestHandler):
             return do_replace(req)
         if path == "/api/diagnostics":
             return diagnostics()
+        if path == "/api/check-update":
+            return check_update()
         if path == "/api/open-link":
             key = req.get("key", "")
             question = str(req.get("question") or "").strip()[:200]

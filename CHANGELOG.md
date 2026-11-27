@@ -4,7 +4,8 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 
 | Version | Released | Download | Release page |
 |---|---|---|---|
-| **1.1.5** (latest) | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.5.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.5/Station-Announcement-Maker-Setup-1.1.5.exe) | [v1.1.5](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.5) |
+| **1.1.6** (latest) | 27 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.6.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.6/Station-Announcement-Maker-Setup-1.1.6.exe) | [v1.1.6](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.6) |
+| 1.1.5 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.5.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.5/Station-Announcement-Maker-Setup-1.1.5.exe) | [v1.1.5](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.5) |
 | 1.1.4 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.4.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.4/Station-Announcement-Maker-Setup-1.1.4.exe) | [v1.1.4](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.4) |
 | 1.1.3 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.3.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.3/Station-Announcement-Maker-Setup-1.1.3.exe) | [v1.1.3](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.3) |
 | 1.1.2 | 26 Nov 2026 | [Station-Announcement-Maker-Setup-1.1.2.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.2/Station-Announcement-Maker-Setup-1.1.2.exe) | [v1.1.2](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.2) |
@@ -13,6 +14,19 @@ Every version of Station Announcement Maker, newest first. Each one stays downlo
 | 1.0.0 | 25 Nov 2026 | [Station-Announcement-Maker-Setup-1.0.0.exe](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.0.0/Station-Announcement-Maker-Setup-1.0.0.exe) | [v1.0.0](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.0.0) |
 
 Always the newest: **[Station-Announcement-Maker-Setup.exe](https://github.com/piscongentine/station-announcement-maker/releases/latest/download/Station-Announcement-Maker-Setup.exe)**. Setup updates an installed copy in place, and your settings are kept.
+
+---
+
+## 1.1.6 · 27 Nov 2026
+
+[⬇️ Download 1.1.6](https://github.com/piscongentine/station-announcement-maker/releases/download/v1.1.6/Station-Announcement-Maker-Setup-1.1.6.exe) · [Release page](https://github.com/piscongentine/station-announcement-maker/releases/tag/v1.1.6)
+
+### Improved: Check for updates
+- **Check for updates** (About and Help & Report) now asks GitHub for the latest version and compares it with yours, number by number (1.1.10 is newer than 1.1.9).
+- **Already up to date:** a message says *"You have the latest version"*, and GitHub is **not** opened.
+- **Newer version on GitHub:** a message shows both versions and the release page opens, so you can download the new setup.
+- **No internet:** a message says GitHub could not be reached; nothing opens.
+- While checking, the button's icon spins and the button can't be pressed twice.
 
 ---
 
